@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocQar - Your Phone Number is Your Address</title>
+    <meta name="description" content="Send and receive packages using just your phone number. No house address needed. LocQar smart lockers across Ghana.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--navy-deep:#0A1628;--navy-medium:#152238;--navy-light:#1E3A5F;--coral:#FF6B58;--coral-light:#FF8A7A;--coral-glow:rgba(255,107,88,0.3);--cream:#F5F1E8;--steel:#8B9AAF;--white:#FFFFFF;--green:#34D399;--red:#FF4D4D}
+        html{scroll-padding-top:90px;scroll-behavior:smooth}
+        body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy-deep);line-height:1.6;overflow-x:hidden}
+        .page-loader{position:fixed;inset:0;background:var(--navy-deep);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+        .page-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .loader-logo{font-family:'Sora';font-size:2.5rem;font-weight:800;color:var(--white);animation:loaderPulse 1s ease-in-out infinite}
+        @keyframes loaderPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.95)}}
+        .reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}.reveal-delay-5{transition-delay:.5s}
+        nav{position:fixed;top:0;width:100%;background:rgba(10,22,40,.95);backdrop-filter:blur(20px);z-index:1000;border-bottom:1px solid rgba(255,107,88,.15);transition:box-shadow .3s}
+        .nav-inner{max-width:1400px;margin:0 auto;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center}
+        .logo{font-family:'Sora';font-size:1.8rem;font-weight:800;color:var(--white);letter-spacing:-.02em;cursor:pointer;text-decoration:none;display:inline-block;line-height:1.1}
+        .logo span{color:var(--white)}
+        .logo .tagline{display:block;font-size:.55rem;font-weight:600;color:var(--coral);letter-spacing:.15em;text-transform:uppercase;text-align:center}
+        .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+        .nav-links a{font-family:'Sora';color:var(--cream);text-decoration:none;font-weight:600;font-size:.95rem;transition:color .3s}
+        .nav-links a:hover{color:var(--coral)}
+        .nav-login{opacity:.85}.nav-login:hover{opacity:1!important}
+        .cta-nav{background:var(--coral);color:var(--white)!important;padding:.7rem 1.8rem;border-radius:8px;transition:all .3s}
+        .cta-nav:hover{background:var(--coral-light);transform:translateY(-2px);box-shadow:0 8px 24px var(--coral-glow)}
+        .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1001;background:none;border:none}
+        .hamburger span{width:26px;height:2.5px;background:var(--white);border-radius:2px;transition:all .3s;display:block}
+        .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+        .hamburger.active span:nth-child(2){opacity:0}
+        .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+        .mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,22,40,.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+        .mobile-menu.open{display:flex}
+        .mobile-menu a{font-family:'Sora';color:var(--white);text-decoration:none;font-size:1.5rem;font-weight:700;transition:color .3s}
+        .mobile-menu a:hover{color:var(--coral)}
+        .modal-overlay{position:fixed;inset:0;background:rgba(10,22,40,.8);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s;backdrop-filter:blur(8px)}
+        .modal-overlay.open{opacity:1;visibility:visible}
+        .modal{background:var(--white);border-radius:20px;padding:3rem;max-width:440px;width:90%;position:relative;transform:scale(.9);transition:transform .3s}
+        .modal-overlay.open .modal{transform:scale(1)}
+        .modal-close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--steel);transition:color .3s}
+        .modal-close:hover{color:var(--coral)}
+        .modal h2{font-family:'Sora';font-size:1.8rem;font-weight:800;color:var(--navy-deep);margin-bottom:.5rem}
+        .modal p{color:var(--steel);margin-bottom:2rem;font-size:.95rem}
+        .modal-tabs{display:flex;gap:0;margin-bottom:2rem;border-radius:10px;overflow:hidden;border:2px solid var(--cream)}
+        .modal-tab{flex:1;padding:.8rem;text-align:center;font-family:'Sora';font-weight:700;font-size:.9rem;cursor:pointer;background:var(--cream);color:var(--steel);border:none;transition:all .3s}
+        .modal-tab.active{background:var(--coral);color:var(--white)}
+        .form-group{margin-bottom:1.2rem}
+        .form-group label{display:block;font-family:'Sora';font-weight:600;font-size:.85rem;color:var(--navy-deep);margin-bottom:.4rem}
+        .form-group input{width:100%;padding:.9rem 1rem;border:2px solid #e0ddd5;border-radius:10px;font-family:'DM Sans';font-size:1rem;transition:border-color .3s;outline:none;background:var(--cream)}
+        .form-group input:focus{border-color:var(--coral)}
+        .form-group input::placeholder{color:var(--steel)}
+        .btn-submit{width:100%;padding:1rem;border:none;border-radius:10px;background:var(--coral);color:var(--white);font-family:'Sora';font-weight:700;font-size:1rem;cursor:pointer;transition:all .3s;margin-top:.5rem}
+        .btn-submit:hover{background:var(--coral-light);box-shadow:0 8px 24px var(--coral-glow)}
+        .form-footer{text-align:center;margin-top:1.2rem;font-size:.85rem;color:var(--steel)}
+        .form-footer a{color:var(--coral);text-decoration:none;font-weight:600}
+        .form-divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:var(--steel);font-size:.85rem}
+        .form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:#e0ddd5}
+        .btn-google{width:100%;padding:.9rem;border:2px solid #e0ddd5;border-radius:10px;background:var(--white);font-family:'Sora';font-weight:600;font-size:.9rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:.6rem}
+        .btn-google:hover{border-color:var(--coral);background:var(--cream)}
+        .toast{position:fixed;top:100px;right:2rem;z-index:3000;padding:1rem 1.8rem;border-radius:12px;font-family:'Sora';font-weight:600;font-size:.9rem;color:var(--white);transform:translateX(120%);transition:transform .4s ease;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+        .toast.show{transform:translateX(0)}.toast.success{background:var(--green)}.toast.error{background:var(--red)}
+        #homePage{transition:opacity .3s}
+        .hero{background:linear-gradient(135deg,#0A1628,#1E3A5F);min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:80px}
+        .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,88,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,88,.03) 1px,transparent 1px);background-size:60px 60px;animation:gridShift 20s linear infinite}
+        @keyframes gridShift{to{transform:translate(60px,60px)}}
+        .hero-inner{max-width:1400px;margin:0 auto;padding:4rem 3rem;position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+        .hero h1{font-family:'Sora';font-size:4.8rem;font-weight:800;color:var(--white);line-height:1.08;margin-bottom:1.8rem;letter-spacing:-.03em;animation:fadeUp .8s ease-out}
+        .hero h1 .hl{color:var(--coral);display:block;margin-top:.3rem}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        .hero p{font-size:1.3rem;color:var(--steel);max-width:540px;margin-bottom:2.5rem;line-height:1.8;animation:fadeUp .8s ease-out .2s both}
+        .hero-ctas{display:flex;gap:1.2rem;animation:fadeUp .8s ease-out .35s both;flex-wrap:wrap}
+        .btn{font-family:'Sora';padding:1.1rem 2.6rem;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;transition:all .3s;display:inline-block;cursor:pointer;border:none}
+        .btn-primary{background:var(--coral);color:var(--white);box-shadow:0 10px 30px var(--coral-glow)}
+        .btn-primary:hover{background:var(--coral-light);transform:translateY(-3px);box-shadow:0 15px 40px rgba(255,107,88,.4)}
+        .btn-outline{background:transparent;color:var(--white);border:2px solid var(--steel)}
+        .btn-outline:hover{border-color:var(--coral);color:var(--coral);transform:translateY(-3px)}
+        .hero-stats{margin-top:4rem;display:flex;gap:3rem;animation:fadeUp .8s ease-out .5s both}
+        .stat{border-left:3px solid var(--coral);padding-left:1.2rem}
+        .stat-num{font-family:'Sora';font-size:2.6rem;font-weight:800;color:var(--white);line-height:1;margin-bottom:.3rem}
+        .stat-lbl{color:var(--steel);font-size:.95rem}
+        .phone-mockup{position:relative;display:flex;align-items:center;justify-content:center;animation:fadeUp .8s ease-out .4s both}
+        .phone{width:300px;height:600px;background:#111;border-radius:40px;border:4px solid #333;position:relative;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 60px rgba(255,107,88,.1)}
+        .phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:28px;background:#111;border-radius:0 0 18px 18px;z-index:5}
+        .phone-screen{width:100%;height:100%;background:linear-gradient(180deg,#0d1b2a,#1b2d4a);display:flex;flex-direction:column;align-items:center;padding:3rem 1.5rem 1.5rem}
+        .phone-logo{font-family:'Sora';font-size:1.3rem;font-weight:800;color:var(--white);margin-bottom:.3rem}
+        .phone-logo span{color:var(--coral)}
+        .phone-tagline{font-size:.65rem;color:var(--steel);margin-bottom:2rem}
+        .phone-field{width:100%;padding:.9rem 1rem;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem}
+        .phone-field .icon{font-size:1rem}.phone-field .text{color:var(--steel);font-size:.75rem}
+        .phone-btn{width:100%;padding:.9rem;border-radius:10px;background:var(--coral);color:var(--white);text-align:center;font-family:'Sora';font-weight:700;font-size:.85rem;margin-top:.6rem}
+        .phone-divider{width:40px;height:2px;background:rgba(255,255,255,.1);margin:1.5rem 0}
+        .phone-notif{width:100%;padding:.8rem 1rem;border-radius:10px;background:rgba(255,107,88,.12);border:1px solid rgba(255,107,88,.25);display:flex;align-items:center;gap:.6rem;animation:notifPulse 3s ease-in-out infinite}
+        @keyframes notifPulse{0%,100%{box-shadow:0 0 0 rgba(255,107,88,0)}50%{box-shadow:0 0 20px rgba(255,107,88,.15)}}
+        .phone-notif .dot{width:8px;height:8px;border-radius:50%;background:var(--coral);flex-shrink:0}
+        .phone-notif .ntxt{font-size:.7rem;color:var(--cream);line-height:1.4}.phone-notif .ntxt strong{color:var(--coral)}
+        .phone-glow{position:absolute;width:350px;height:350px;background:radial-gradient(circle,rgba(255,107,88,.15),transparent 70%);border-radius:50%;z-index:-1;animation:glowFloat 6s ease-in-out infinite}
+        @keyframes glowFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(10px,-20px) scale(1.1)}}
+        .section-header{text-align:center;max-width:800px;margin:0 auto 4rem}
+        .section-label{font-family:'JetBrains Mono';font-size:.85rem;color:var(--coral);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.8rem;font-weight:600}
+        .section-title{font-family:'Sora';font-size:3.2rem;font-weight:800;color:var(--navy-deep);line-height:1.2;margin-bottom:1.2rem}
+        .section-desc{font-size:1.15rem;color:var(--navy-light);line-height:1.8}
+        .marquee-section{padding:1.5rem 0;background:var(--navy-deep);overflow:hidden}
+        .marquee-track{display:flex;gap:3rem;animation:marquee 30s linear infinite;width:max-content}
+        @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .marquee-item{font-family:'Sora';font-size:.9rem;color:var(--steel);white-space:nowrap;display:flex;align-items:center;gap:.5rem}
+        .marquee-item .m-dot{width:6px;height:6px;border-radius:50%;background:var(--coral)}
+        .features{padding:7rem 3rem}
+        .features-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+        .fcard{background:var(--white);padding:2.5rem;border-radius:16px;transition:all .4s;border:2px solid transparent;position:relative;overflow:hidden}
+        .fcard::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,var(--coral),var(--coral-light));transform:scaleX(0);transform-origin:left;transition:transform .4s}
+        .fcard:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(10,22,40,.12);border-color:var(--coral)}
+        .fcard:hover::before{transform:scaleX(1)}
+        .fcard-icon{width:60px;height:60px;background:linear-gradient(135deg,var(--coral),var(--coral-light));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.5rem;transition:transform .4s}
+        .fcard:hover .fcard-icon{transform:scale(1.1) rotate(5deg)}
+        .fcard h3{font-family:'Sora';font-size:1.3rem;font-weight:700;color:var(--navy-deep);margin-bottom:.8rem}
+        .fcard p{color:var(--navy-light);line-height:1.7;font-size:.95rem}
+        .how-section{padding:7rem 3rem;background:var(--navy-deep);position:relative;overflow:hidden}
+        .steps{max-width:1100px;margin:0 auto}
+        .step{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-bottom:5rem;align-items:center}
+        .step:nth-child(even){direction:rtl}.step:nth-child(even)>*{direction:ltr}
+        .step-num{font-family:'Sora';font-size:.9rem;color:var(--coral);font-weight:700;letter-spacing:.1em;margin-bottom:.8rem}
+        .step h3{font-family:'Sora';font-size:2.2rem;font-weight:800;color:var(--white);margin-bottom:1.2rem;line-height:1.2}
+        .step p{font-size:1.05rem;color:var(--steel);line-height:1.8}
+        .step-vis{background:var(--navy-medium);border-radius:20px;height:300px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.06)}
+        .step-anim{display:flex;flex-direction:column;align-items:center;gap:1rem}
+        .step-anim .big-icon{font-size:3.5rem;animation:iconBounce 2s ease-in-out infinite}
+        @keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        .step-anim .label{font-family:'JetBrains Mono';font-size:.75rem;color:var(--coral);background:rgba(255,107,88,.1);padding:.4rem 1rem;border-radius:20px;letter-spacing:.05em}
+        .step-anim .sub{font-size:.8rem;color:var(--steel);text-align:center;max-width:200px}
+        .use-cases{padding:7rem 3rem}
+        .uc-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem}
+        .uc-card{background:var(--white);border-radius:20px;padding:3rem;transition:all .4s;position:relative;overflow:hidden}
+        .uc-card:hover{transform:translateY(-5px);box-shadow:0 20px 50px rgba(10,22,40,.1)}
+        .uc-card h3{font-family:'Sora';font-size:1.6rem;font-weight:700;color:var(--navy-deep);margin-bottom:1rem}
+        .uc-card>p{color:var(--navy-light);line-height:1.8;margin-bottom:1.5rem}
+        .uc-list{list-style:none}
+        .uc-list li{padding:.6rem 0 .6rem 1.8rem;color:var(--navy-medium);position:relative;font-size:.95rem}
+        .uc-list li::before{content:'\2192';position:absolute;left:0;color:var(--coral);font-weight:700}
+        .uc-card .tag{margin-top:1.5rem;font-weight:600;color:var(--coral);font-size:.95rem}
+        .social-proof{padding:6rem 3rem;background:var(--white)}
+        .testimonials{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+        .t-card{background:var(--cream);border-radius:16px;padding:2.5rem;position:relative;transition:transform .3s}
+        .t-card:hover{transform:translateY(-4px)}
+        .t-card .stars{color:var(--coral);font-size:1.1rem;margin-bottom:1rem;letter-spacing:2px}
+        .t-card .quote{font-size:1rem;color:var(--navy-medium);line-height:1.7;margin-bottom:1.5rem;font-style:italic}
+        .t-card .author{display:flex;align-items:center;gap:.8rem}
+        .t-card .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--coral-light));display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:700;font-size:.9rem}
+        .t-card .aname{font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--navy-deep)}
+        .t-card .arole{font-size:.8rem;color:var(--steel)}
+        .trust-bar{max-width:800px;margin:3rem auto 0;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+        .trust-item{text-align:center}
+        .trust-item .t-num{font-family:'Sora';font-size:2rem;font-weight:800;color:var(--coral)}
+        .trust-item .t-lbl{font-size:.85rem;color:var(--steel);margin-top:.2rem}
+        .faq-section{padding:7rem 3rem;background:var(--cream)}
+        .faq-list{max-width:800px;margin:0 auto}
+        .faq-item{background:var(--white);border-radius:14px;margin-bottom:1rem;overflow:hidden;border:2px solid transparent;transition:border-color .3s}
+        .faq-item.open{border-color:var(--coral)}
+        .faq-q{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Sora';font-weight:700;font-size:1.05rem;color:var(--navy-deep);transition:color .3s}
+        .faq-q:hover{color:var(--coral)}
+        .faq-arrow{font-size:1.2rem;transition:transform .3s;color:var(--coral)}
+        .faq-item.open .faq-arrow{transform:rotate(180deg)}
+        .faq-a{padding:0 2rem;max-height:0;overflow:hidden;transition:all .4s ease;color:var(--navy-light);line-height:1.8;font-size:.95rem}
+        .faq-item.open .faq-a{padding:0 2rem 1.5rem;max-height:300px}
+        .locations{padding:7rem 3rem;background:var(--white)}
+        .loc-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+        .loc-card{background:var(--cream);padding:2rem;border-radius:14px;display:flex;align-items:center;gap:1.2rem;transition:all .3s;border:2px solid transparent}
+        .loc-card:hover{border-color:var(--coral);transform:translateY(-3px);box-shadow:0 12px 30px rgba(10,22,40,.08)}
+        .loc-icon{font-size:2rem;flex-shrink:0}
+        .loc-card h4{font-family:'Sora';font-weight:700;color:var(--navy-deep);font-size:1rem}
+        .loc-card p{font-size:.85rem;color:var(--steel);margin-top:.2rem}
+        .loc-note{text-align:center;margin-top:2rem;color:var(--coral);font-weight:600;font-size:1.1rem}
+        .pricing{padding:7rem 3rem;background:var(--cream)}
+        .price-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+        .price-card{background:var(--white);border-radius:16px;padding:2.5rem;text-align:center;transition:all .4s;border:2px solid transparent}
+        .price-card.featured{background:var(--navy-deep);border-color:var(--coral);transform:scale(1.05)}
+        .price-card:hover{transform:translateY(-5px);box-shadow:0 20px 50px rgba(10,22,40,.12)}
+        .price-card.featured:hover{transform:scale(1.05) translateY(-5px)}
+        .price-card .size{font-family:'Sora';font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
+        .price-card.featured .size{color:var(--white)}
+        .price-card .from{font-size:.8rem;color:var(--steel);margin-bottom:.5rem}
+        .price-card .price{font-family:'Sora';font-size:2.5rem;font-weight:800;color:var(--coral);margin-bottom:.5rem}
+        .price-card .unit{font-size:.8rem;color:var(--steel);margin-bottom:1.5rem}
+        .price-card .feat-list{list-style:none;text-align:left}
+        .price-card .feat-list li{padding:.5rem 0;font-size:.9rem;color:var(--navy-light);border-bottom:1px solid rgba(0,0,0,.05)}
+        .price-card.featured .feat-list li{color:var(--steel);border-color:rgba(255,255,255,.06)}
+        .price-card .feat-list li::before{content:'\2713 ';color:var(--coral);font-weight:700}
+        .price-note{text-align:center;margin-top:2rem;color:var(--steel);font-size:.9rem}
+        .price-note a{color:var(--coral);text-decoration:none;font-weight:700;cursor:pointer}.price-note a:hover{text-decoration:underline}
+        .safety{padding:7rem 3rem;background:var(--navy-deep)}
+        .safety .section-title{color:var(--white)}
+        .safety-answer{text-align:center;font-family:'Sora';font-size:2.5rem;font-weight:800;color:var(--coral);margin-bottom:3rem}
+        .safety-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+        .s-card{background:var(--navy-medium);border-radius:14px;padding:2rem;text-align:center;border:1px solid rgba(255,255,255,.06);transition:all .3s}
+        .s-card:hover{border-color:var(--coral);transform:translateY(-4px)}
+        .s-card .s-icon{font-size:2rem;margin-bottom:1rem}
+        .s-card h4{font-family:'Sora';font-weight:700;color:var(--white);font-size:1rem;margin-bottom:.5rem}
+        .s-card p{font-size:.85rem;color:var(--steel);line-height:1.6}
+        .newsletter{padding:5rem 3rem;background:var(--white);text-align:center}
+        .nl-box{max-width:600px;margin:0 auto;background:linear-gradient(135deg,var(--navy-deep),var(--navy-light));border-radius:20px;padding:3rem;position:relative;overflow:hidden}
+        .nl-box::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,107,88,.08),transparent 50%);animation:rotate 30s linear infinite}
+        @keyframes rotate{to{transform:rotate(360deg)}}
+        .nl-box h3{font-family:'Sora';font-size:1.6rem;font-weight:800;color:var(--white);margin-bottom:.5rem;position:relative}
+        .nl-box>p{color:var(--steel);margin-bottom:1.5rem;font-size:.95rem;position:relative}
+        .nl-form{display:flex;gap:.8rem;position:relative;flex-wrap:wrap;justify-content:center}
+        .nl-form input{flex:1;min-width:200px;padding:.9rem 1.2rem;border:2px solid rgba(255,255,255,.15);border-radius:10px;background:rgba(255,255,255,.08);color:var(--white);font-family:'DM Sans';font-size:1rem;outline:none;transition:border-color .3s}
+        .nl-form input::placeholder{color:var(--steel)}.nl-form input:focus{border-color:var(--coral)}
+        .nl-form button{padding:.9rem 2rem;border:none;border-radius:10px;background:var(--coral);color:var(--white);font-family:'Sora';font-weight:700;font-size:.95rem;cursor:pointer;transition:all .3s;white-space:nowrap}
+        .nl-form button:hover{background:var(--coral-light);box-shadow:0 8px 24px var(--coral-glow)}
+        .cta-section{padding:7rem 3rem;background:linear-gradient(135deg,#0A1628,#1E3A5F);text-align:center;position:relative;overflow:hidden}
+        .cta-section::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,107,88,.08),transparent 50%);animation:rotate 30s linear infinite}
+        .cta-inner{max-width:900px;margin:0 auto;position:relative;z-index:2}
+        .cta-inner h2{font-family:'Sora';font-size:3.5rem;font-weight:800;color:var(--white);margin-bottom:1.5rem;line-height:1.2}
+        .cta-inner>p{font-size:1.2rem;color:var(--steel);margin-bottom:3rem;line-height:1.8}
+        .cta-cards{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:800px;margin:0 auto 3rem}
+        .cta-card{background:rgba(255,255,255,.07);padding:2.5rem;border-radius:16px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);text-align:left}
+        .cta-card h3{font-family:'Sora';font-size:1.4rem;color:var(--white);margin-bottom:1rem;font-weight:700}
+        .cta-card ol{color:var(--steel);line-height:2.2;padding-left:1.2rem;font-size:.95rem}
+        .dl-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+        .store-btn{display:flex;align-items:center;gap:.8rem;background:var(--white);color:var(--navy-deep);padding:.9rem 1.8rem;border-radius:12px;text-decoration:none;transition:all .3s;border:2px solid transparent}
+        .store-btn:hover{border-color:var(--coral);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+        .store-btn .store-icon{font-size:1.6rem}.store-btn .store-text{text-align:left}
+        .store-btn .store-label{font-size:.65rem;color:var(--steel);line-height:1}
+        .store-btn .store-name{font-family:'Sora';font-weight:700;font-size:1.05rem;line-height:1.2}
+        .contact{padding:5rem 3rem;background:var(--cream);text-align:center}
+        .contact-grid{max-width:700px;margin:2rem auto 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem}
+        .contact-card{background:var(--white);border-radius:14px;padding:2rem 1.5rem;text-align:center;transition:all .3s;text-decoration:none;color:inherit;display:block;border:2px solid transparent}
+        .contact-card:hover{border-color:var(--coral);transform:translateY(-3px);box-shadow:0 12px 30px rgba(10,22,40,.08)}
+        .contact-card .c-icon{font-size:2rem;margin-bottom:.8rem}
+        .contact-card h4{font-family:'Sora';font-weight:700;font-size:1rem;color:var(--navy-deep);margin-bottom:.3rem}
+        .contact-card p{font-size:.85rem;color:var(--steel)}
+        .floating-cta{position:fixed;bottom:2rem;right:2rem;z-index:900;background:var(--coral);color:var(--white);padding:1rem 1.8rem;border-radius:50px;font-family:'Sora';font-weight:700;font-size:.9rem;box-shadow:0 8px 30px var(--coral-glow);cursor:pointer;text-decoration:none;transform:translateY(100px);opacity:0;transition:all .4s;display:flex;align-items:center;gap:.5rem}
+        .floating-cta.show{transform:translateY(0);opacity:1}
+        .floating-cta:hover,.floating-cta.show:hover{background:var(--coral-light);transform:translateY(-3px);box-shadow:0 12px 40px rgba(255,107,88,.4)}
+        .back-to-top{position:fixed;bottom:2rem;left:2rem;z-index:900;width:48px;height:48px;border-radius:50%;background:var(--navy-deep);color:var(--white);border:2px solid rgba(255,107,88,.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;transform:translateY(100px);opacity:0;transition:all .4s;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+        .back-to-top.show{transform:translateY(0);opacity:1}
+        .back-to-top:hover,.back-to-top.show:hover{background:var(--coral);border-color:var(--coral);transform:translateY(-3px);box-shadow:0 12px 30px var(--coral-glow)}
+        .cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:1500;background:var(--navy-deep);border-top:1px solid rgba(255,107,88,.2);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .5s ease;box-shadow:0 -8px 30px rgba(0,0,0,.2)}
+        .cookie-banner.show{transform:translateY(0)}
+        .cookie-banner p{color:var(--steel);font-size:.9rem;max-width:600px}
+        .cookie-banner a{color:var(--coral);text-decoration:underline;cursor:pointer}
+        .cookie-btn{padding:.6rem 1.5rem;border-radius:8px;font-family:'Sora';font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .3s}
+        .cookie-accept{background:var(--coral);color:var(--white)}.cookie-accept:hover{background:var(--coral-light)}
+        .cookie-decline{background:transparent;color:var(--steel);border:1px solid var(--steel)}.cookie-decline:hover{border-color:var(--coral);color:var(--coral)}
+        footer{background:var(--navy-deep);padding:4rem 3rem 2rem;border-top:1px solid rgba(255,255,255,.06)}
+        .footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+        .footer-brand p{color:var(--steel);line-height:1.7;max-width:320px;margin-top:.8rem}
+        .footer-col h4{font-family:'Sora';font-size:1rem;font-weight:700;color:var(--white);margin-bottom:1.2rem}
+        .footer-col ul{list-style:none}.footer-col li{margin-bottom:.7rem}
+        .footer-col a{color:var(--steel);text-decoration:none;transition:color .3s;font-size:.95rem;cursor:pointer}
+        .footer-col a:hover{color:var(--coral)}
+        .footer-bottom{max-width:1200px;margin:0 auto;padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;color:var(--steel);font-size:.85rem}
+        .social{display:flex;gap:1.2rem}.social a{color:var(--steel);transition:color .3s;font-size:.9rem}.social a:hover{color:var(--coral)}
+        @media(max-width:1024px){
+            .hero-inner{grid-template-columns:1fr}.phone-mockup{display:none}.hero h1{font-size:3.8rem}
+            .features-grid,.loc-grid,.testimonials{grid-template-columns:repeat(2,1fr)}
+            .step{grid-template-columns:1fr;gap:2rem}.step:nth-child(even){direction:ltr}
+            .safety-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}
+        }
+        @media(max-width:768px){
+            .nav-links{display:none}.hamburger{display:flex}.hero h1{font-size:2.8rem}
+            .hero-stats{flex-direction:column;gap:1.5rem}.section-title{font-size:2.4rem}
+            .features-grid,.uc-grid,.testimonials,.price-grid,.loc-grid{grid-template-columns:1fr}
+            .safety-grid{grid-template-columns:1fr 1fr}
+            .price-card.featured{transform:none}.price-card.featured:hover{transform:translateY(-5px)}
+            .cta-cards{grid-template-columns:1fr}.cta-inner h2{font-size:2.5rem}
+            .footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:1rem;text-align:center}
+            .nav-inner{padding:1.2rem 1.5rem}
+            .hero-inner,.features,.how-section,.use-cases,.social-proof,.faq-section,.locations,.pricing,.safety,.newsletter,.cta-section,.contact{padding-left:1.5rem;padding-right:1.5rem}
+            .contact-grid{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="loader-logo">LocQar</div></div>
+<nav id="nav"><div class="nav-inner"><a class="logo" href="#">LocQar<span class="tagline">Pick 'N' Go</span></a><ul class="nav-links"><li><a href="#features">Features</a></li><li><a href="#how">How It Works</a></li><li><a href="#locations">Locations</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li><li><a href="#" id="openLogin">Log In</a></li><li><a href="#app" class="cta-nav">Get the App</a></li></ul><button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<div class="mobile-menu" id="mobileMenu"><a href="#features">Features</a><a href="#how">How It Works</a><a href="#locations">Locations</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#" id="openLoginMobile">Log In</a><a href="#app" style="color:var(--coral)">Get the App</a></div>
+<div class="modal-overlay" id="authModal"><div class="modal"><button class="modal-close" id="closeModal">\u2715</button><h2 id="modalTitle">Welcome Back</h2><p id="modalDesc">Log in to manage your packages</p><div class="modal-tabs"><button class="modal-tab active" data-tab="login">Log In</button><button class="modal-tab" data-tab="signup">Sign Up</button></div><div id="loginForm"><div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+233 XX XXX XXXX" id="loginPhone"></div><div class="form-group"><label>Password</label><input type="password" placeholder="Enter your password" id="loginPass"></div><button class="btn-submit" id="loginBtn">Log In</button><div class="form-footer"><a href="#">Forgot password?</a></div></div><div id="signupForm" style="display:none"><div class="form-group"><label>Full Name</label><input type="text" placeholder="Kwame Asante" id="signupName"></div><div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+233 XX XXX XXXX" id="signupPhone"></div><div class="form-group"><label>Password</label><input type="password" placeholder="Create a password" id="signupPass"></div><button class="btn-submit" id="signupBtn">Create Account</button></div><div class="form-divider">or</div><button class="btn-google" id="googleBtn">\ud83d\udd35 Continue with Google</button></div></div>
+<div class="toast" id="toast"></div>
+<div id="homePage">
+<section class="hero" id="home"><div class="hero-grid"></div><div class="hero-inner"><div><h1>Never Miss a Package<span class="hl">Again.</span></h1><p>Send and receive packages using just your phone number. No house address. No missed deliveries. No stress.</p><div class="hero-ctas"><a href="#send" class="btn btn-primary">Send a Package</a><a href="#receive" class="btn btn-outline">Receive a Package</a></div><div class="hero-stats"><div class="stat"><div class="stat-num" data-count="60" data-suffix="s">0s</div><div class="stat-lbl">To Send</div></div><div class="stat"><div class="stat-num">24/7</div><div class="stat-lbl">Pickup</div></div><div class="stat"><div class="stat-num" data-count="0">0</div><div class="stat-lbl">Missed Deliveries</div></div></div></div><div class="phone-mockup"><div class="phone-glow"></div><div class="phone"><div class="phone-notch"></div><div class="phone-screen"><div class="phone-logo">Loc<span>Qar</span></div><div class="phone-tagline">Your phone number is your address</div><div class="phone-field"><span class="icon">\ud83d\udcf1</span><span class="text">+233 24 XXX XXXX</span></div><div class="phone-field"><span class="icon">\ud83d\udce6</span><span class="text">Medium package</span></div><div class="phone-field"><span class="icon">\ud83d\udccd</span><span class="text">Accra Mall Station</span></div><div class="phone-btn">Send Package \u2192</div><div class="phone-divider"></div><div class="phone-notif"><div class="dot"></div><div class="ntxt">Package arrived! Code: <strong>LQ-8294</strong><br>Pick up at Legon Station</div></div></div></div></div></div></section>
+<div class="marquee-section"><div class="marquee-track"><div class="marquee-item"><span class="m-dot"></span>Trusted by 120,000+ deliveries</div><div class="marquee-item"><span class="m-dot"></span>Stations across Ghana</div><div class="marquee-item"><span class="m-dot"></span>24/7 package pickup</div><div class="marquee-item"><span class="m-dot"></span>No address needed</div><div class="marquee-item"><span class="m-dot"></span>Fully automated lockers</div><div class="marquee-item"><span class="m-dot"></span>Secure & monitored</div><div class="marquee-item"><span class="m-dot"></span>Cash-free payments</div><div class="marquee-item"><span class="m-dot"></span>SMS notifications</div><div class="marquee-item"><span class="m-dot"></span>Trusted by 120,000+ deliveries</div><div class="marquee-item"><span class="m-dot"></span>Stations across Ghana</div><div class="marquee-item"><span class="m-dot"></span>24/7 package pickup</div><div class="marquee-item"><span class="m-dot"></span>No address needed</div><div class="marquee-item"><span class="m-dot"></span>Fully automated lockers</div><div class="marquee-item"><span class="m-dot"></span>Secure & monitored</div><div class="marquee-item"><span class="m-dot"></span>Cash-free payments</div><div class="marquee-item"><span class="m-dot"></span>SMS notifications</div></div></div>
+<section id="features" class="features"><div class="section-header reveal"><div class="section-label">What You Can Do</div><h2 class="section-title">Simple. Fast. Secure.</h2><p class="section-desc">Everything you need to send and receive — without waiting at home.</p></div><div class="features-grid"><div class="fcard reveal reveal-delay-1"><div class="fcard-icon">\ud83d\uded2</div><h3>Buy Things Online</h3><p>Shop from anywhere and use your phone number as the delivery address.</p></div><div class="fcard reveal reveal-delay-2"><div class="fcard-icon">\ud83d\udce6</div><h3>Send Items to Anyone</h3><p>Just know their phone number. Drop the package at any LocQar station.</p></div><div class="fcard reveal reveal-delay-3"><div class="fcard-icon">\ud83d\udcc4</div><h3>Receive Documents</h3><p>Contracts, certificates, parcels — receive them securely.</p></div><div class="fcard reveal reveal-delay-1"><div class="fcard-icon">\ud83d\udd10</div><h3>Fully Secure Storage</h3><p>Each package has a unique code. Only you can open your locker.</p></div><div class="fcard reveal reveal-delay-2"><div class="fcard-icon">\u26a1</div><h3>Pickup On Your Time</h3><p>24/7 access means your schedule, not the courier's.</p></div><div class="fcard reveal reveal-delay-3"><div class="fcard-icon">\ud83d\udcb3</div><h3>Cashless Payments</h3><p>Pay through the app with mobile money or card.</p></div></div></section>
+<section id="how" class="how-section"><div class="section-header reveal"><div class="section-label">How It Works</div><h2 class="section-title" style="color:var(--white)">Four steps. That's it.</h2><p class="section-desc" style="color:var(--steel)">No forms, no phone calls, no waiting.</p></div><div class="steps"><div class="step reveal"><div><div class="step-num">STEP 01</div><h3>Use Your Phone Number</h3><p>Your phone number is your delivery address.</p></div><div class="step-vis"><div class="step-anim"><div class="big-icon">\ud83d\udcf1</div><div class="label">+233 XX XXX XXXX</div><div class="sub">That's your address now</div></div></div></div><div class="step reveal"><div><div class="step-num">STEP 02</div><h3>Drop at Any Station</h3><p>Walk to any LocQar drop box. Enter the receiver's phone number.</p></div><div class="step-vis"><div class="step-anim"><div class="big-icon">\ud83d\udce6</div><div class="label">PACKAGE SECURED</div><div class="sub">Locker assigned automatically</div></div></div></div><div class="step reveal"><div><div class="step-num">STEP 03</div><h3>Receiver Gets a Code</h3><p>Instant text message with a unique pickup code.</p></div><div class="step-vis"><div class="step-anim"><div class="big-icon">\ud83d\udcac</div><div class="label">CODE: LQ-8294</div><div class="sub">SMS sent instantly</div></div></div></div><div class="step reveal"><div><div class="step-num">STEP 04</div><h3>Pick Up Anytime</h3><p>Scan the code, open the locker, grab the package. 24/7.</p></div><div class="step-vis"><div class="step-anim"><div class="big-icon">\u2705</div><div class="label">COLLECTED</div><div class="sub">Available day or night</div></div></div></div></div></section>
+<section id="use-cases" class="use-cases"><div class="section-header reveal"><div class="section-label">For Everyone</div><h2 class="section-title">Sending or receiving? We've got you.</h2></div><div class="uc-grid"><div class="uc-card reveal reveal-delay-1" id="send"><h3>\ud83d\udce4 For Senders</h3><p>Sending a package has never been easier.</p><ul class="uc-list"><li>Walk to a LocQar drop box near you</li><li>Enter the receiver's phone number</li><li>Put in the package and go</li><li>Receiver gets notified instantly</li></ul><p class="tag">No forms. No phone calls. Just drop and go.</p></div><div class="uc-card reveal reveal-delay-2" id="receive"><h3>\ud83d\udce5 For Receivers</h3><p>Your package, your schedule.</p><ul class="uc-list"><li>Get a text when your package arrives</li><li>Scan your unique code at any station</li><li>Collect instantly — no queues</li><li>Available 24/7, day or night</li></ul><p class="tag">Pickup on your time, not theirs.</p></div></div></section>
+<section class="social-proof"><div class="section-header reveal"><div class="section-label">Trusted by Users</div><h2 class="section-title">What people are saying</h2></div><div class="testimonials"><div class="t-card reveal reveal-delay-1"><div class="stars">\u2605\u2605\u2605\u2605\u2605</div><div class="quote">"One of the best drop off services. You are assured of picking up your item just as was dropped off."</div><div class="author"><div class="avatar">EL</div><div><div class="aname">Eugene Larweh</div><div class="arole">Verified User</div></div></div></div><div class="t-card reveal reveal-delay-2"><div class="stars">\u2605\u2605\u2605\u2605\u2605</div><div class="quote">"Picked my parcel with complete ease and convenience. Pickup can be done at any time."</div><div class="author"><div class="avatar">AA</div><div><div class="aname">Albert Aikins</div><div class="arole">Local Guide</div></div></div></div><div class="t-card reveal reveal-delay-3"><div class="stars">\u2605\u2605\u2605\u2605\u2605</div><div class="quote">"Accepting deliveries in a LocQar cuts down my delivery costs and adds to convenience."</div><div class="author"><div class="avatar">NS</div><div><div class="aname">Nathan Sodja</div><div class="arole">Local Guide</div></div></div></div></div><div class="trust-bar reveal"><div class="trust-item"><div class="t-num" data-count="120000" data-suffix="+">0+</div><div class="t-lbl">Packages Delivered</div></div><div class="trust-item"><div class="t-num">4.9\u2605</div><div class="t-lbl">App Rating</div></div><div class="trust-item"><div class="t-num" data-count="98" data-suffix="%">0%</div><div class="t-lbl">On-Time Pickup</div></div></div></section>
+<section id="faq" class="faq-section"><div class="section-header reveal"><div class="section-label">Got Questions?</div><h2 class="section-title">Frequently Asked Questions</h2></div><div class="faq-list"><div class="faq-item reveal"><div class="faq-q">What if I don't have the LocQar app?<span class="faq-arrow">\u25bc</span></div><div class="faq-a">No worries! Receivers don't need the app. You'll get an SMS with a unique code.</div></div><div class="faq-item reveal"><div class="faq-q">How long can my package stay in the locker?<span class="faq-arrow">\u25bc</span></div><div class="faq-a">Packages include 48-72 hours of free storage. After that, a small daily fee applies.</div></div><div class="faq-item reveal"><div class="faq-q">Is there a weight or size limit?<span class="faq-arrow">\u25bc</span></div><div class="faq-a">No weight limits! If it fits in the locker, it ships. We have Small, Medium, and Large sizes.</div></div><div class="faq-item reveal"><div class="faq-q">How do I pay?<span class="faq-arrow">\u25bc</span></div><div class="faq-a">We accept mobile money (MTN MoMo, Vodafone Cash, AirtelTigo Money), debit/credit cards, and in-app wallet.</div></div></div></section>
+<section id="locations" class="locations"><div class="section-header reveal"><div class="section-label">Find Us</div><h2 class="section-title">Where Can I Use LocQar?</h2></div><div class="loc-grid"><div class="loc-card reveal"><div class="loc-icon">\ud83c\udf93</div><div><h4>Universities</h4><p>On-campus for students & staff</p></div></div><div class="loc-card reveal"><div class="loc-icon">\ud83c\udfe2</div><div><h4>Office Buildings</h4><p>Skip the reception desk</p></div></div><div class="loc-card reveal"><div class="loc-icon">\ud83d\udecd\ufe0f</div><div><h4>Shopping Centers</h4><p>Pick up while you shop</p></div></div><div class="loc-card reveal"><div class="loc-icon">\ud83c\udfe0</div><div><h4>Hostels & Residences</h4><p>Secure delivery for shared spaces</p></div></div><div class="loc-card reveal"><div class="loc-icon">\u26fd</div><div><h4>Fuel Stations</h4><p>Grab packages on the go</p></div></div><div class="loc-card reveal"><div class="loc-icon">\ud83d\udccd</div><div><h4>Neighborhood Hubs</h4><p>Coming to communities near you</p></div></div></div><p class="loc-note reveal">More locations launching every month \u2192</p></section>
+<section id="pricing" class="pricing"><div class="section-header reveal"><div class="section-label">Transparent Pricing</div><h2 class="section-title">How Much Does It Cost?</h2></div><div class="price-grid"><div class="price-card reveal"><div class="size">\ud83d\udcc4 Small</div><div class="from">Starting from</div><div class="price">GH\u20b5 5</div><div class="unit">per delivery</div><ul class="feat-list"><li>Documents & envelopes</li><li>Up to 1 kg</li><li>SMS + app notification</li><li>24/7 pickup access</li></ul></div><div class="price-card featured reveal"><div class="size">\ud83d\udce6 Medium</div><div class="from">Starting from</div><div class="price">GH\u20b5 12</div><div class="unit">per delivery</div><ul class="feat-list"><li>Shoes, electronics, books</li><li>Up to 5 kg</li><li>SMS + app notification</li><li>24/7 pickup access</li></ul></div><div class="price-card reveal"><div class="size">\ud83d\uddf3\ufe0f Large</div><div class="from">Starting from</div><div class="price">GH\u20b5 20</div><div class="unit">per delivery</div><ul class="feat-list"><li>Larger parcels & boxes</li><li>Up to 15 kg</li><li>SMS + app notification</li><li>24/7 pickup access</li></ul></div></div></section>
+<section class="safety"><div class="section-header reveal"><div class="section-label">Security</div><h2 class="section-title">Is My Package Safe?</h2></div><div class="safety-answer reveal">Absolutely.</div><div class="safety-grid"><div class="s-card reveal"><div class="s-icon">\ud83d\udd11</div><h4>Unique Code</h4><p>One-time access code that expires after use</p></div><div class="s-card reveal"><div class="s-icon">\ud83d\udc64</div><h4>Only You</h4><p>Only the intended receiver can open the locker</p></div><div class="s-card reveal"><div class="s-icon">\ud83d\udcf9</div><h4>24/7 Monitored</h4><p>All stations are monitored around the clock</p></div><div class="s-card reveal"><div class="s-icon">\ud83e\udd16</div><h4>Fully Automated</h4><p>No humans touch your package at any point</p></div></div></section>
+<section class="newsletter"><div class="nl-box reveal"><h3>Stay in the Loop</h3><p>Get updates on new stations, features, and offers.</p><div class="nl-form"><input type="email" placeholder="Enter your email" id="nlEmail"><button id="nlBtn">Subscribe</button></div></div></section>
+<section id="app" class="cta-section"><div class="cta-inner"><h2 class="reveal">Get Started with LocQar</h2><p class="reveal">Download the app and send your first package in under 60 seconds.</p><div class="cta-cards"><div class="cta-card reveal"><h3>\ud83d\udce4 I Want to Send</h3><ol><li>Create your free account</li><li>Find the nearest station</li><li>Drop your package & go</li></ol></div><div class="cta-card reveal"><h3>\ud83d\udce5 I Want to Receive</h3><ol><li>Share your phone number</li><li>Get a notification with code</li><li>Pick up anytime, 24/7</li></ol></div></div><div class="dl-btns reveal"><a href="#" class="store-btn"><span class="store-icon">\u25b6\ufe0f</span><div class="store-text"><span class="store-label">GET IT ON</span><span class="store-name">Google Play</span></div></a><a href="#" class="store-btn"><span class="store-icon">\ud83c\udf4e</span><div class="store-text"><span class="store-label">DOWNLOAD ON THE</span><span class="store-name">App Store</span></div></a></div></div></section>
+<section class="contact"><div class="section-label reveal">Contact</div><h2 class="section-title reveal">Need Help?</h2><div class="contact-grid"><a href="https://wa.me/233XXXXXXXXX" class="contact-card reveal"><div class="c-icon">\ud83d\udcac</div><h4>WhatsApp</h4><p>Chat with support</p></a><a href="mailto:support@locqar.com" class="contact-card reveal"><div class="c-icon">\ud83d\udce7</div><h4>Email</h4><p>support@locqar.com</p></a><a href="tel:+233XXXXXXXXX" class="contact-card reveal"><div class="c-icon">\ud83d\udcde</div><h4>Call Us</h4><p>Mon-Sat, 8am-8pm</p></a></div></section>
+<footer><div class="footer-grid"><div class="footer-brand"><div class="logo">LocQar<span class="tagline">Pick 'N' Go</span></div><p>Your phone number is your address. Made with \u2764\ufe0f in Ghana.</p></div><div class="footer-col"><h4>Product</h4><ul><li><a href="#how">How It Works</a></li><li><a href="#locations">Locations</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#app">Download App</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#faq">Help Center</a></li><li><a href="#">For Business</a></li><li><a href="#">Careers</a></li></ul></div><div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Security</a></li></ul></div></div><div class="footer-bottom"><p>\u00a9 2026 LocQar Technologies Ltd. All rights reserved.</p><div class="social"><a href="#">LinkedIn</a><a href="#">Twitter/X</a><a href="#">Instagram</a><a href="#">TikTok</a></div></div></footer>
+</div>
+<a href="#app" class="floating-cta" id="floatingCta">\ud83d\udcf1 Get the App</a>
+<button class="back-to-top" id="backToTop" aria-label="Back to top">\u2191</button>
+<div class="cookie-banner" id="cookieBanner"><p>\ud83c\udf6a We use cookies to improve your experience.</p><button class="cookie-btn cookie-accept" id="cookieAccept">Accept All</button><button class="cookie-btn cookie-decline" id="cookieDecline">Decline</button></div>
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('pageLoader').classList.add('hidden'),800)});
+function showToast(m,t='success'){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+t+' show';setTimeout(()=>e.classList.remove('show'),3000)}
+const ham=document.getElementById('hamburger'),mm=document.getElementById('mobileMenu');
+ham.addEventListener('click',()=>{ham.classList.toggle('active');mm.classList.toggle('open')});
+document.querySelectorAll('#mobileMenu a').forEach(a=>a.addEventListener('click',()=>{ham.classList.remove('active');mm.classList.remove('open')}));
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const h=a.getAttribute('href');if(h==='#')return;e.preventDefault();const t=document.querySelector(h);if(t){window.scrollTo({top:t.offsetTop-80,behavior:'smooth'})}})});
+const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+const cObs=new IntersectionObserver(en=>{en.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;const c=parseInt(el.dataset.count),s=el.dataset.suffix||'';if(isNaN(c))return;let cur=0;const step=Math.max(1,Math.floor(c/40));const iv=setInterval(()=>{cur+=step;if(cur>=c){cur=c;clearInterval(iv)}el.textContent=cur.toLocaleString()+s},30);cObs.unobserve(el)})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cObs.observe(el));
+const fc=document.getElementById('floatingCta'),bt=document.getElementById('backToTop');
+window.addEventListener('scroll',()=>{const y=window.pageYOffset;document.getElementById('nav').style.boxShadow=y>80?'0 4px 20px rgba(0,0,0,.15)':'none';if(y>600){fc.classList.add('show');bt.classList.add('show')}else{fc.classList.remove('show');bt.classList.remove('show')}});
+bt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+const modal=document.getElementById('authModal');
+document.getElementById('openLogin').addEventListener('click',e=>{e.preventDefault();modal.classList.add('open');document.body.style.overflow='hidden'});
+document.getElementById('openLoginMobile')?.addEventListener('click',e=>{e.preventDefault();ham.classList.remove('active');mm.classList.remove('open');modal.classList.add('open');document.body.style.overflow='hidden'});
+document.getElementById('closeModal').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow=''});
+modal.addEventListener('click',e=>{if(e.target===modal){modal.classList.remove('open');document.body.style.overflow=''}});
+function switchTab(t){document.querySelectorAll('.modal-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));document.getElementById('loginForm').style.display=t==='login'?'block':'none';document.getElementById('signupForm').style.display=t==='signup'?'block':'none';document.getElementById('modalTitle').textContent=t==='login'?'Welcome Back':'Create Account';document.getElementById('modalDesc').textContent=t==='login'?'Log in to manage your packages':'Join LocQar — it takes 30 seconds'}
+document.querySelectorAll('.modal-tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+document.getElementById('loginBtn').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';showToast('Welcome back!')});
+document.getElementById('signupBtn').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';showToast('Account created!')});
+document.getElementById('googleBtn').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';showToast('Google sign-in coming soon!')});
+document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>{const i=q.parentElement;const w=i.classList.contains('open');document.querySelectorAll('.faq-item').forEach(x=>x.classList.remove('open'));if(!w)i.classList.add('open')}));
+document.getElementById('nlBtn').addEventListener('click',()=>{const e=document.getElementById('nlEmail').value;if(!e||!e.includes('@')){showToast('Please enter a valid email','error');return}document.getElementById('nlEmail').value='';showToast('Subscribed!')});
+setTimeout(()=>document.getElementById('cookieBanner').classList.add('show'),2000);
+document.getElementById('cookieAccept').addEventListener('click',()=>{document.getElementById('cookieBanner').classList.remove('show')});
+document.getElementById('cookieDecline').addEventListener('click',()=>{document.getElementById('cookieBanner').classList.remove('show')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');document.body.style.overflow=''}});
+</script>
+</body>
+</html>
