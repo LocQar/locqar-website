@@ -482,9 +482,61 @@ footer{background:var(--nd);padding:4rem 3rem 2rem;border-top:1px solid rgba(255
 .dash-panel-footer a{font-family:'Sora';font-size:.85rem;font-weight:600;color:var(--c);text-decoration:none;cursor:pointer;transition:color .3s}
 .dash-panel-footer a:hover{color:var(--cl)}
 
-@media(max-width:1024px){.hero-inner{grid-template-columns:1fr}.phone-mockup{display:none}.hero h1{font-size:3.5rem}.features-grid,.loc-grid,.testimonials{grid-template-columns:repeat(2,1fr)}.step{grid-template-columns:1fr;gap:2rem}.step:nth-child(even){direction:ltr}.safety-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}.finder-grid{grid-template-columns:1fr}.bf-grid,.bb-hero,.bi-grid,.biz-auth-layout{grid-template-columns:1fr}.bb-cards,.bp-grid{grid-template-columns:1fr 1fr}.bp-card.pop{transform:none}.bp-card.pop:hover{transform:translateY(-5px)}.biz-hero h1{font-size:2.8rem}.dash-grid{grid-template-columns:1fr}.dash-stats{grid-template-columns:repeat(2,1fr)}}
+/* ===== SEND PACKAGE PAGE ===== */
+.dash-view{display:none}.dash-view.active{display:block}
+.send-back{display:inline-flex;align-items:center;gap:.5rem;font-family:'Sora';font-weight:600;font-size:.9rem;color:var(--st);cursor:pointer;background:none;border:none;padding:.5rem 0;margin-bottom:1.5rem;transition:color .3s}
+.send-back:hover{color:var(--c)}
+.send-title{font-family:'Sora';font-size:1.8rem;font-weight:800;color:var(--w);margin-bottom:.3rem}
+.send-subtitle{color:var(--st);font-size:.9rem;margin-bottom:2rem}
+.send-grid{display:grid;grid-template-columns:1fr 380px;gap:2rem}
+.send-form-panel{background:var(--nm);border-radius:16px;border:1px solid rgba(255,255,255,.06);padding:2rem}
+.send-form-group{margin-bottom:1.5rem}
+.send-form-group label{display:block;font-family:'Sora';font-weight:600;font-size:.85rem;color:var(--w);margin-bottom:.5rem}
+.send-form-group label span{color:var(--c)}
+.send-form-group .send-hint{font-size:.75rem;color:var(--st);margin-top:.3rem}
+.send-input{width:100%;padding:.9rem 1.2rem;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:var(--w);font-family:'DM Sans';font-size:.9rem;transition:border-color .3s;box-sizing:border-box}
+.send-input:focus{outline:none;border-color:var(--c)}
+.send-input::placeholder{color:rgba(255,255,255,.3)}
+textarea.send-input{resize:vertical;min-height:80px}
+.send-sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.send-size{padding:1.2rem;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.02);cursor:pointer;text-align:center;transition:all .3s}
+.send-size:hover{border-color:rgba(255,107,88,.3)}
+.send-size.selected{border-color:var(--c);background:rgba(255,107,88,.08)}
+.send-size-icon{font-size:1.8rem;margin-bottom:.5rem}
+.send-size-name{font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--w);margin-bottom:.2rem}
+.send-size-dim{font-size:.72rem;color:var(--st);margin-bottom:.4rem}
+.send-size-price{font-family:'Sora';font-weight:800;font-size:1rem;color:var(--c)}
+.send-station-select{width:100%;padding:.9rem 1.2rem;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:var(--w);font-family:'DM Sans';font-size:.9rem;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;box-sizing:border-box}
+.send-station-select:focus{outline:none;border-color:var(--c)}
+.send-station-select option{background:var(--nm);color:var(--w)}
+.send-btn{width:100%;padding:1rem;border-radius:12px;border:none;background:linear-gradient(135deg,var(--c),var(--cl));color:var(--w);font-family:'Sora';font-weight:700;font-size:1rem;cursor:pointer;transition:all .3s}
+.send-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,88,.3)}
+.send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.send-summary{background:var(--nm);border-radius:16px;border:1px solid rgba(255,255,255,.06);padding:2rem;height:fit-content;position:sticky;top:140px}
+.send-summary h3{font-family:'Sora';font-size:1.1rem;font-weight:700;color:var(--w);margin-bottom:1.5rem}
+.send-summary-row{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.send-summary-row:last-of-type{border-bottom:none}
+.send-summary-label{font-size:.85rem;color:var(--st)}
+.send-summary-val{font-family:'Sora';font-weight:600;font-size:.85rem;color:var(--w)}
+.send-summary-val.empty{color:rgba(255,255,255,.2);font-style:italic;font-weight:400}
+.send-summary-total{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;margin-top:.5rem;border-top:2px solid rgba(255,255,255,.08)}
+.send-summary-total .send-summary-label{font-family:'Sora';font-weight:700;color:var(--w);font-size:.95rem}
+.send-summary-total .send-summary-val{font-family:'Sora';font-weight:800;font-size:1.2rem;color:var(--c)}
+.send-success{text-align:center;padding:4rem 2rem}
+.send-success-icon{font-size:4rem;margin-bottom:1.5rem}
+.send-success h2{font-family:'Sora';font-size:1.8rem;font-weight:800;color:var(--w);margin-bottom:.5rem}
+.send-success p{color:var(--st);font-size:.95rem;margin-bottom:.5rem;line-height:1.6}
+.send-success-code{font-family:'JetBrains Mono';font-size:1.8rem;font-weight:700;color:var(--c);background:rgba(255,107,88,.1);padding:.8rem 2rem;border-radius:12px;display:inline-block;margin:1.5rem 0;letter-spacing:.05em}
+.send-success-actions{display:flex;gap:1rem;justify-content:center;margin-top:2rem}
+.send-success-btn{padding:.8rem 2rem;border-radius:10px;font-family:'Sora';font-weight:600;font-size:.9rem;cursor:pointer;transition:all .3s;border:none}
+.send-success-btn.primary{background:linear-gradient(135deg,var(--c),var(--cl));color:var(--w)}
+.send-success-btn.primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,107,88,.3)}
+.send-success-btn.secondary{background:rgba(255,255,255,.05);color:var(--st);border:1.5px solid rgba(255,255,255,.1)}
+.send-success-btn.secondary:hover{border-color:var(--c);color:var(--c)}
+
+@media(max-width:1024px){.hero-inner{grid-template-columns:1fr}.phone-mockup{display:none}.hero h1{font-size:3.5rem}.features-grid,.loc-grid,.testimonials{grid-template-columns:repeat(2,1fr)}.step{grid-template-columns:1fr;gap:2rem}.step:nth-child(even){direction:ltr}.safety-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}.finder-grid{grid-template-columns:1fr}.bf-grid,.bb-hero,.bi-grid,.biz-auth-layout{grid-template-columns:1fr}.bb-cards,.bp-grid{grid-template-columns:1fr 1fr}.bp-card.pop{transform:none}.bp-card.pop:hover{transform:translateY(-5px)}.biz-hero h1{font-size:2.8rem}.dash-grid{grid-template-columns:1fr}.dash-stats{grid-template-columns:repeat(2,1fr)}.send-grid{grid-template-columns:1fr}}
 @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.hero h1{font-size:2.5rem}.hero-stats{flex-direction:column;gap:1.5rem}.st2{font-size:2.2rem}.features-grid,.uc-grid,.testimonials,.price-grid,.loc-grid{grid-template-columns:1fr}.safety-grid,.bb-cards,.bp-grid,.bb-metrics{grid-template-columns:1fr}.price-card.featured{transform:none}.cta-cards{grid-template-columns:1fr}.cta-inner h2{font-size:2.2rem}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:1rem;text-align:center}.nav-inner{padding:1rem 1.5rem}.hero-inner,.features,.how-section,.use-cases,.social-proof,.faq-section,.locations,.pricing,.safety,.newsletter,.cta-section,.contact,.track-section,.finder-section{padding-left:1.5rem;padding-right:1.5rem}.contact-grid{grid-template-columns:1fr}.bfr{grid-template-columns:1fr}.biz-hero h1{font-size:2rem}.biz-hero{padding:6rem 1.5rem 3rem}.biz-section{padding:3rem 1.5rem}.biz-hero-stats{gap:1.5rem}.track-box{flex-direction:column}.dash-header{padding:.8rem 1.5rem;flex-wrap:wrap;gap:.8rem}.dash-body{padding:1.5rem 1.5rem 3rem}.dash-stats{grid-template-columns:1fr 1fr}.dash-stat-val{font-size:1.6rem}.dash-welcome h1{font-size:1.5rem}.dash-table th,.dash-table td{padding:.8rem 1rem;font-size:.8rem}.dash-header-right{gap:.8rem}.dash-user-name{font-size:.8rem}}
-@media(max-width:480px){.dash-stats{grid-template-columns:1fr}.dash-header-left h2{font-size:1.1rem}.dash-table{display:block;overflow-x:auto}}
+@media(max-width:480px){.dash-stats{grid-template-columns:1fr}.dash-header-left h2{font-size:1.1rem}.dash-table{display:block;overflow-x:auto}.send-sizes{grid-template-columns:1fr}.send-title{font-size:1.4rem}.send-success-actions{flex-direction:column}.send-success-code{font-size:1.4rem;padding:.6rem 1.5rem}}
 </style>
 </head>
 <body>
@@ -639,6 +691,7 @@ package = client.packages.<span class="fn">create</span>(
 </div>
 
 <div class="dash-body">
+<div class="dash-view active" id="dashMainView">
 <div class="dash-welcome">
 <h1 id="dashGreeting">Good morning, John!</h1>
 <p>Here's what's happening with your deliveries today.</p>
@@ -735,6 +788,110 @@ package = client.packages.<span class="fn">create</span>(
 </div>
 </div>
 </div>
+</div>
+</div>
+
+<!-- ===== SEND PACKAGE VIEW ===== -->
+<div class="dash-view" id="dashSendView">
+<button class="send-back" id="sendBack">&#8592; Back to Dashboard</button>
+<h2 class="send-title">Send a Package</h2>
+<p class="send-subtitle">Fill in the details below to create a new delivery.</p>
+
+<div class="send-grid">
+<div class="send-form-panel">
+<div class="send-form-group">
+<label>Receiver's Phone Number <span>*</span></label>
+<input type="tel" class="send-input" id="sendPhone" placeholder="+233 XX XXX XXXX">
+<div class="send-hint">The receiver will get an SMS with pickup instructions</div>
+</div>
+
+<div class="send-form-group">
+<label>Receiver's Name <span>*</span></label>
+<input type="text" class="send-input" id="sendName" placeholder="Full name">
+</div>
+
+<div class="send-form-group">
+<label>Package Size <span>*</span></label>
+<div class="send-sizes">
+<div class="send-size" data-size="small" data-price="5">
+<div class="send-size-icon">&#128230;</div>
+<div class="send-size-name">Small</div>
+<div class="send-size-dim">Max 5kg / 30cm</div>
+<div class="send-size-price">GH&#8373; 5</div>
+</div>
+<div class="send-size" data-size="medium" data-price="12">
+<div class="send-size-icon">&#128230;&#128230;</div>
+<div class="send-size-name">Medium</div>
+<div class="send-size-dim">Max 15kg / 50cm</div>
+<div class="send-size-price">GH&#8373; 12</div>
+</div>
+<div class="send-size" data-size="large" data-price="20">
+<div class="send-size-icon">&#128230;&#128230;&#128230;</div>
+<div class="send-size-name">Large</div>
+<div class="send-size-dim">Max 30kg / 80cm</div>
+<div class="send-size-price">GH&#8373; 20</div>
+</div>
+</div>
+</div>
+
+<div class="send-form-group">
+<label>Pickup Station <span>*</span></label>
+<select class="send-station-select" id="sendStation">
+<option value="">Select a station</option>
+<option value="Accra Mall">Accra Mall - Tetteh Quarshie, East Legon</option>
+<option value="Achimota Mall">Achimota Mall - Achimota, Accra</option>
+<option value="Legon Campus">Legon Campus - University of Ghana</option>
+<option value="Kotoka Airport">Kotoka Int. Airport - Airport City</option>
+</select>
+</div>
+
+<div class="send-form-group">
+<label>Note (optional)</label>
+<textarea class="send-input" id="sendNote" placeholder="Any special instructions for the receiver..."></textarea>
+</div>
+
+<button class="send-btn" id="sendSubmitBtn">Send Package</button>
+</div>
+
+<div class="send-summary">
+<h3>Order Summary</h3>
+<div class="send-summary-row">
+<span class="send-summary-label">Receiver</span>
+<span class="send-summary-val empty" id="sumReceiver">Not set</span>
+</div>
+<div class="send-summary-row">
+<span class="send-summary-label">Phone</span>
+<span class="send-summary-val empty" id="sumPhone">Not set</span>
+</div>
+<div class="send-summary-row">
+<span class="send-summary-label">Size</span>
+<span class="send-summary-val empty" id="sumSize">Not selected</span>
+</div>
+<div class="send-summary-row">
+<span class="send-summary-label">Station</span>
+<span class="send-summary-val empty" id="sumStation">Not selected</span>
+</div>
+<div class="send-summary-total">
+<span class="send-summary-label">Total</span>
+<span class="send-summary-val" id="sumTotal">GH&#8373; 0</span>
+</div>
+</div>
+</div>
+
+<!-- Send Success -->
+<div class="send-success" id="sendSuccess" style="display:none">
+<div class="send-success-icon">&#9989;</div>
+<h2>Package Sent!</h2>
+<p>Your package has been registered. The receiver will get an SMS notification.</p>
+<div class="send-success-code" id="sendTrackCode">LQ-0000</div>
+<p>Share this tracking code with the receiver.</p>
+<div class="send-success-actions">
+<button class="send-success-btn primary" id="sendAnother">Send Another</button>
+<button class="send-success-btn secondary" id="sendGoBack">Back to Dashboard</button>
+</div>
+</div>
+</div>
+
 </div>
 </div>
 

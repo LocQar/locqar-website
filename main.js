@@ -412,6 +412,7 @@ $('bizSuccessBtn').addEventListener('click', function () { showPage('dashboard')
 function initDashboard() {
   var u = auth.currentUser;
   if (!u) return;
+  showDashView('dashMainView');
   var dn = u.displayName || 'User';
   var parts = dn.split('[');
   var name = parts[0].trim();
@@ -432,7 +433,113 @@ function initDashboard() {
 $('dashLogout').addEventListener('click', function () {
   signOut(auth).then(function () { updateNav(null); showPage('biz'); bizAuthSwitch('login'); showToast('Logged out successfully') });
 });
-$('dashSendPkg').addEventListener('click', function () { showToast('Send Package form coming soon!') });
+// ===== SEND PACKAGE =====
+function showDashView(id) {
+  document.querySelectorAll('.dash-view').forEach(function (v) { v.classList.remove('active') });
+  var view = $(id);
+  if (view) view.classList.add('active');
+  window.scrollTo({ top: 0 });
+}
+
+var selectedSize = null;
+var selectedPrice = 0;
+
+$('dashSendPkg').addEventListener('click', function () { openSendForm() });
+
+function openSendForm() {
+  showDashView('dashSendView');
+  // Reset form
+  $('sendPhone').value = '';
+  $('sendName').value = '';
+  $('sendStation').value = '';
+  $('sendNote').value = '';
+  selectedSize = null;
+  selectedPrice = 0;
+  document.querySelectorAll('.send-size').forEach(function (s) { s.classList.remove('selected') });
+  $('sendSuccess').style.display = 'none';
+  document.querySelector('.send-grid').style.display = '';
+  document.querySelector('.send-back').style.display = '';
+  document.querySelector('.send-title').style.display = '';
+  document.querySelector('.send-subtitle').style.display = '';
+  updateSendSummary();
+}
+
+// Size selection
+document.querySelectorAll('.send-size').forEach(function (s) {
+  s.addEventListener('click', function () {
+    document.querySelectorAll('.send-size').forEach(function (x) { x.classList.remove('selected') });
+    s.classList.add('selected');
+    selectedSize = s.dataset.size;
+    selectedPrice = parseInt(s.dataset.price);
+    updateSendSummary();
+  });
+});
+
+// Live summary updates
+$('sendPhone').addEventListener('input', updateSendSummary);
+$('sendName').addEventListener('input', updateSendSummary);
+$('sendStation').addEventListener('change', updateSendSummary);
+
+function updateSendSummary() {
+  var name = $('sendName').value.trim();
+  var phone = $('sendPhone').value.trim();
+  var station = $('sendStation').value;
+
+  setSummaryVal('sumReceiver', name || 'Not set');
+  setSummaryVal('sumPhone', phone || 'Not set');
+  setSummaryVal('sumSize', selectedSize ? (selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)) : 'Not selected');
+  setSummaryVal('sumStation', station || 'Not selected');
+  $('sumTotal').textContent = 'GH\u20B5 ' + selectedPrice;
+}
+
+function setSummaryVal(id, val) {
+  var el = $(id);
+  el.textContent = val;
+  if (val === 'Not set' || val === 'Not selected') {
+    el.classList.add('empty');
+  } else {
+    el.classList.remove('empty');
+  }
+}
+
+// Submit
+$('sendSubmitBtn').addEventListener('click', function () {
+  var phone = $('sendPhone').value.trim();
+  var name = $('sendName').value.trim();
+  var station = $('sendStation').value;
+
+  if (!phone) { showToast('Enter receiver\'s phone number', 'error'); return }
+  if (!name) { showToast('Enter receiver\'s name', 'error'); return }
+  if (!selectedSize) { showToast('Select a package size', 'error'); return }
+  if (!station) { showToast('Select a pickup station', 'error'); return }
+
+  var btn = $('sendSubmitBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  // Generate tracking code
+  var code = 'LQ-' + (Math.floor(Math.random() * 9000) + 1000);
+
+  setTimeout(function () {
+    btn.textContent = 'Send Package';
+    btn.disabled = false;
+
+    // Show success
+    document.querySelector('.send-grid').style.display = 'none';
+    document.querySelector('.send-back').style.display = 'none';
+    document.querySelector('.send-title').style.display = 'none';
+    document.querySelector('.send-subtitle').style.display = 'none';
+    $('sendTrackCode').textContent = code;
+    $('sendSuccess').style.display = 'block';
+    showToast('Package sent successfully!');
+  }, 1200);
+});
+
+// Navigation
+$('sendBack').addEventListener('click', function () { showDashView('dashMainView') });
+$('sendGoBack').addEventListener('click', function () { showDashView('dashMainView') });
+$('sendAnother').addEventListener('click', function () { openSendForm() });
+
 $('dashBulkUpload').addEventListener('click', function () { showToast('Bulk upload coming soon!') });
 $('dashTeam').addEventListener('click', function () { showToast('Team management coming soon!') });
 $('dashExport').addEventListener('click', function () { showToast('Generating report...'); setTimeout(function () { showToast('Report downloaded!') }, 1500) });
