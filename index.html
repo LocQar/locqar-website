@@ -68,68 +68,6 @@
         .toast{position:fixed;top:100px;right:2rem;z-index:3000;padding:1rem 1.8rem;border-radius:12px;font-family:'Sora';font-weight:600;font-size:.9rem;color:var(--white);transform:translateX(120%);transition:transform .4s ease;box-shadow:0 8px 30px rgba(0,0,0,.2)}
         .toast.show{transform:translateX(0)}.toast.success{background:var(--green)}.toast.error{background:var(--red)}
         #homePage{transition:opacity .3s}
-        #dashboardPage{display:none;min-height:100vh;background:var(--cream);padding-top:80px}
-        #dashboardPage.active{display:block}
-        .dash-topbar{background:var(--white);border-bottom:2px solid rgba(10,22,40,.06);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-        .dash-greeting h2{font-family:'Sora';font-size:1.6rem;font-weight:800;color:var(--navy-deep)}
-        .dash-greeting p{font-size:.9rem;color:var(--steel);margin-top:.2rem}
-        .dash-actions{display:flex;gap:.8rem;align-items:center}
-        .btn-dash{font-family:'Sora';padding:.7rem 1.5rem;border-radius:10px;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .3s;display:inline-flex;align-items:center;gap:.4rem}
-        .btn-dash-primary{background:var(--coral);color:var(--white)}.btn-dash-primary:hover{background:var(--coral-light);box-shadow:0 8px 24px var(--coral-glow)}
-        .btn-dash-outline{background:var(--white);color:var(--navy-deep);border:2px solid #e0ddd5}.btn-dash-outline:hover{border-color:var(--coral);color:var(--coral)}
-        .btn-dash-ghost{background:transparent;color:var(--steel);padding:.7rem .8rem}.btn-dash-ghost:hover{color:var(--coral)}
-        .dash-content{max-width:1200px;margin:0 auto;padding:2rem 3rem}
-        .dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem}
-        .dash-stat-card{background:var(--white);border-radius:14px;padding:1.5rem;border:2px solid transparent;transition:all .3s}
-        .dash-stat-card:hover{border-color:var(--coral);transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,22,40,.06)}
-        .dash-stat-card .ds-icon{font-size:1.5rem;margin-bottom:.8rem}
-        .dash-stat-card .ds-value{font-family:'Sora';font-size:2rem;font-weight:800;color:var(--navy-deep);line-height:1}
-        .dash-stat-card .ds-label{font-size:.85rem;color:var(--steel);margin-top:.3rem}
-        .dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:2rem}
-        .dash-card{background:var(--white);border-radius:16px;padding:2rem;border:2px solid transparent;transition:border-color .3s}
-        .dash-card:hover{border-color:rgba(255,107,88,.15)}
-        .dash-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
-        .dash-card-header h3{font-family:'Sora';font-size:1.15rem;font-weight:700;color:var(--navy-deep)}
-        .dash-card-header .badge{font-family:'JetBrains Mono';font-size:.75rem;background:rgba(255,107,88,.1);color:var(--coral);padding:.3rem .8rem;border-radius:20px;font-weight:600}
-        .pkg-list{list-style:none}
-        .pkg-item{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid rgba(10,22,40,.05);transition:background .2s}
-        .pkg-item:last-child{border-bottom:none}
-        .pkg-icon-wrap{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-        .pkg-icon-sent{background:rgba(52,211,153,.1)}
-        .pkg-icon-received{background:rgba(255,107,88,.1)}
-        .pkg-icon-pending{background:rgba(139,154,175,.1)}
-        .pkg-details{flex:1;min-width:0}
-        .pkg-details .pkg-name{font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--navy-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .pkg-details .pkg-meta{font-size:.8rem;color:var(--steel);margin-top:.15rem}
-        .pkg-status{font-family:'JetBrains Mono';font-size:.7rem;font-weight:600;padding:.3rem .7rem;border-radius:20px;white-space:nowrap}
-        .pkg-status.delivered{background:rgba(52,211,153,.1);color:var(--green)}
-        .pkg-status.in-transit{background:rgba(255,107,88,.1);color:var(--coral)}
-        .pkg-status.pending{background:rgba(139,154,175,.1);color:var(--steel)}
-        .quick-actions-grid{display:grid;grid-template-columns:1fr;gap:.8rem}
-        .qa-btn{display:flex;align-items:center;gap:1rem;padding:1.1rem;background:var(--cream);border-radius:12px;border:2px solid transparent;cursor:pointer;transition:all .3s;text-align:left;font-family:'DM Sans'}
-        .qa-btn:hover{border-color:var(--coral);background:var(--white);transform:translateX(4px)}
-        .qa-btn .qa-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--coral),var(--coral-light));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
-        .qa-btn .qa-text h4{font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--navy-deep)}
-        .qa-btn .qa-text p{font-size:.8rem;color:var(--steel);margin-top:.1rem}
-        .dash-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-        .activity-item{display:flex;gap:1rem;padding:.8rem 0;border-bottom:1px solid rgba(10,22,40,.05)}
-        .activity-item:last-child{border-bottom:none}
-        .activity-dot{width:10px;height:10px;border-radius:50%;margin-top:.4rem;flex-shrink:0}
-        .activity-dot.green{background:var(--green)}
-        .activity-dot.coral{background:var(--coral)}
-        .activity-dot.steel{background:var(--steel)}
-        .activity-info .act-text{font-size:.9rem;color:var(--navy-deep)}
-        .activity-info .act-time{font-size:.75rem;color:var(--steel);margin-top:.15rem}
-        .locker-item{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0;border-bottom:1px solid rgba(10,22,40,.05)}
-        .locker-item:last-child{border-bottom:none}
-        .locker-info h4{font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--navy-deep)}
-        .locker-info p{font-size:.8rem;color:var(--steel);margin-top:.1rem}
-        .locker-status{font-family:'JetBrains Mono';font-size:.7rem;font-weight:600;padding:.3rem .7rem;border-radius:20px}
-        .locker-status.available{background:rgba(52,211,153,.1);color:var(--green)}
-        .locker-status.occupied{background:rgba(255,107,88,.1);color:var(--coral)}
-        .dash-empty{text-align:center;padding:2rem 1rem;color:var(--steel)}
-        .dash-empty .empty-icon{font-size:2.5rem;margin-bottom:.8rem}
-        .dash-empty p{font-size:.95rem;line-height:1.6}
         .hero{background:linear-gradient(135deg,#0A1628,#1E3A5F);min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:80px}
         .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,88,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,88,.03) 1px,transparent 1px);background-size:60px 60px;animation:gridShift 20s linear infinite}
         @keyframes gridShift{to{transform:translate(60px,60px)}}
@@ -325,9 +263,6 @@
             .features-grid,.loc-grid,.testimonials{grid-template-columns:repeat(2,1fr)}
             .step{grid-template-columns:1fr;gap:2rem}.step:nth-child(even){direction:ltr}
             .safety-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}
-            .dash-stats{grid-template-columns:repeat(2,1fr)}
-            .dash-grid{grid-template-columns:1fr}
-            .dash-bottom-grid{grid-template-columns:1fr}
         }
         @media(max-width:768px){
             .nav-links{display:none}.hamburger{display:flex}.hero h1{font-size:2.8rem}
@@ -340,12 +275,6 @@
             .nav-inner{padding:1.2rem 1.5rem}
             .hero-inner,.features,.how-section,.use-cases,.social-proof,.faq-section,.locations,.pricing,.safety,.newsletter,.cta-section,.contact{padding-left:1.5rem;padding-right:1.5rem}
             .contact-grid{grid-template-columns:1fr}
-            .dash-topbar{padding:1.2rem 1.5rem}
-            .dash-content{padding:1.5rem}
-            .dash-stats{grid-template-columns:1fr 1fr}
-            .dash-greeting h2{font-size:1.3rem}
-            .dash-actions{width:100%}
-            .dash-actions .btn-dash{flex:1;justify-content:center;font-size:.8rem;padding:.6rem 1rem}
         }
     </style>
 </head>
@@ -371,111 +300,6 @@
 <section class="contact"><div class="section-label reveal">Contact</div><h2 class="section-title reveal">Need Help?</h2><div class="contact-grid"><a href="https://wa.me/233XXXXXXXXX" class="contact-card reveal"><div class="c-icon">\ud83d\udcac</div><h4>WhatsApp</h4><p>Chat with support</p></a><a href="mailto:support@locqar.com" class="contact-card reveal"><div class="c-icon">\ud83d\udce7</div><h4>Email</h4><p>support@locqar.com</p></a><a href="tel:+233XXXXXXXXX" class="contact-card reveal"><div class="c-icon">\ud83d\udcde</div><h4>Call Us</h4><p>Mon-Sat, 8am-8pm</p></a></div></section>
 <footer><div class="footer-grid"><div class="footer-brand"><div class="logo">LocQar<span class="tagline">Pick 'N' Go</span></div><p>Your phone number is your address. Made with \u2764\ufe0f in Ghana.</p></div><div class="footer-col"><h4>Product</h4><ul><li><a href="#how">How It Works</a></li><li><a href="#locations">Locations</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#app">Download App</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#faq">Help Center</a></li><li><a href="#">For Business</a></li><li><a href="#">Careers</a></li></ul></div><div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Security</a></li></ul></div></div><div class="footer-bottom"><p>\u00a9 2026 LocQar Technologies Ltd. All rights reserved.</p><div class="social"><a href="#">LinkedIn</a><a href="#">Twitter/X</a><a href="#">Instagram</a><a href="#">TikTok</a></div></div></footer>
 </div>
-<div id="dashboardPage">
-    <div class="dash-topbar">
-        <div class="dash-greeting">
-            <h2 id="dashGreeting">Welcome back, Kwame!</h2>
-            <p>Here's your package activity overview</p>
-        </div>
-        <div class="dash-actions">
-            <button class="btn-dash btn-dash-primary" id="dashSendBtn">➕ Send Package</button>
-            <button class="btn-dash btn-dash-outline" id="dashLogout">Log Out</button>
-        </div>
-    </div>
-    <div class="dash-content">
-        <div class="dash-stats">
-            <div class="dash-stat-card">
-                <div class="ds-icon">📦</div>
-                <div class="ds-value">0</div>
-                <div class="ds-label">Total Packages</div>
-            </div>
-            <div class="dash-stat-card">
-                <div class="ds-icon">📤</div>
-                <div class="ds-value">0</div>
-                <div class="ds-label">Sent</div>
-            </div>
-            <div class="dash-stat-card">
-                <div class="ds-icon">📥</div>
-                <div class="ds-value">0</div>
-                <div class="ds-label">Received</div>
-            </div>
-            <div class="dash-stat-card">
-                <div class="ds-icon">⏳</div>
-                <div class="ds-value">0</div>
-                <div class="ds-label">Pending</div>
-            </div>
-        </div>
-        <div class="dash-grid">
-            <div class="dash-card">
-                <div class="dash-card-header">
-                    <h3>Recent Packages</h3>
-                    <span class="badge">All</span>
-                </div>
-                <div class="dash-empty" id="emptyPackages">
-                    <div class="empty-icon">📦</div>
-                    <p>No packages yet.<br>Send your first package to get started!</p>
-                </div>
-                <ul class="pkg-list" id="pkgList" style="display:none"></ul>
-            </div>
-            <div class="dash-card">
-                <div class="dash-card-header">
-                    <h3>Quick Actions</h3>
-                </div>
-                <div class="quick-actions-grid">
-                    <button class="qa-btn" id="qaSend">
-                        <div class="qa-icon">📤</div>
-                        <div class="qa-text"><h4>Send a Package</h4><p>Drop off at any LocQar station</p></div>
-                    </button>
-                    <button class="qa-btn" id="qaTrack">
-                        <div class="qa-icon">🔍</div>
-                        <div class="qa-text"><h4>Track Package</h4><p>Enter tracking code to check status</p></div>
-                    </button>
-                    <button class="qa-btn" id="qaLocations">
-                        <div class="qa-icon">📍</div>
-                        <div class="qa-text"><h4>Find Stations</h4><p>Locate nearby LocQar lockers</p></div>
-                    </button>
-                    <button class="qa-btn" id="qaHelp">
-                        <div class="qa-icon">💬</div>
-                        <div class="qa-text"><h4>Get Help</h4><p>Contact support via WhatsApp</p></div>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="dash-bottom-grid">
-            <div class="dash-card">
-                <div class="dash-card-header">
-                    <h3>Recent Activity</h3>
-                </div>
-                <div class="dash-empty" id="emptyActivity">
-                    <div class="empty-icon">📋</div>
-                    <p>No activity yet. Your package history will appear here.</p>
-                </div>
-            </div>
-            <div class="dash-card">
-                <div class="dash-card-header">
-                    <h3>Nearby Stations</h3>
-                    <span class="badge">Accra</span>
-                </div>
-                <div class="locker-item">
-                    <div class="locker-info"><h4>🏫 University of Ghana, Legon</h4><p>Main Gate Entrance</p></div>
-                    <span class="locker-status available">Available</span>
-                </div>
-                <div class="locker-item">
-                    <div class="locker-info"><h4>🛍️ Accra Mall</h4><p>Ground Floor, Near Entrance</p></div>
-                    <span class="locker-status available">Available</span>
-                </div>
-                <div class="locker-item">
-                    <div class="locker-info"><h4>🏢 Airport City</h4><p>Opposite Silver Star Tower</p></div>
-                    <span class="locker-status occupied">Full</span>
-                </div>
-                <div class="locker-item">
-                    <div class="locker-info"><h4>⛽ Shell, East Legon</h4><p>Boundary Road Station</p></div>
-                    <span class="locker-status available">Available</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <a href="#app" class="floating-cta" id="floatingCta">\ud83d\udcf1 Get the App</a>
 <button class="back-to-top" id="backToTop" aria-label="Back to top">\u2191</button>
 <div class="cookie-banner" id="cookieBanner"><p>\ud83c\udf6a We use cookies to improve your experience.</p><button class="cookie-btn cookie-accept" id="cookieAccept">Accept All</button><button class="cookie-btn cookie-decline" id="cookieDecline">Decline</button></div>
@@ -500,61 +324,15 @@ document.getElementById('closeModal').addEventListener('click',()=>{modal.classL
 modal.addEventListener('click',e=>{if(e.target===modal){modal.classList.remove('open');document.body.style.overflow=''}});
 function switchTab(t){document.querySelectorAll('.modal-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));document.getElementById('loginForm').style.display=t==='login'?'block':'none';document.getElementById('signupForm').style.display=t==='signup'?'block':'none';document.getElementById('modalTitle').textContent=t==='login'?'Welcome Back':'Create Account';document.getElementById('modalDesc').textContent=t==='login'?'Log in to manage your packages':'Join LocQar — it takes 30 seconds'}
 document.querySelectorAll('.modal-tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
-function showDashboard(userName){
-    const name=userName||'User';
-    document.getElementById('dashGreeting').textContent='Welcome back, '+name+'!';
-    document.getElementById('homePage').style.display='none';
-    document.getElementById('dashboardPage').classList.add('active');
-    document.getElementById('floatingCta').style.display='none';
-    document.getElementById('backToTop').style.display='none';
-    const nl=document.querySelector('.nav-links');
-    nl.dataset.prevHtml=nl.innerHTML;
-    nl.innerHTML='<li><a href="#" class="nav-login" id="navDashboard">Dashboard</a></li><li><a href="#" id="navLogout" class="cta-nav">Log Out</a></li>';
-    document.getElementById('navLogout').addEventListener('click',function(ev){ev.preventDefault();showHome()});
-    window.scrollTo({top:0,behavior:'smooth'});
-}
-function showHome(){
-    document.getElementById('homePage').style.display='';
-    document.getElementById('dashboardPage').classList.remove('active');
-    document.getElementById('floatingCta').style.display='';
-    document.getElementById('backToTop').style.display='';
-    const nl=document.querySelector('.nav-links');
-    if(nl.dataset.prevHtml)nl.innerHTML=nl.dataset.prevHtml;
-    document.getElementById('openLogin').addEventListener('click',function(ev){ev.preventDefault();modal.classList.add('open');document.body.style.overflow='hidden'});
-    showToast('Logged out successfully');
-    window.scrollTo({top:0,behavior:'smooth'});
-}
-document.getElementById('loginBtn').addEventListener('click',()=>{
-    const phone=document.getElementById('loginPhone').value.trim();
-    if(!phone){showToast('Please enter your phone number','error');return}
-    const pass=document.getElementById('loginPass').value;
-    if(!pass){showToast('Please enter your password','error');return}
-    modal.classList.remove('open');document.body.style.overflow='';
-    showToast('Welcome back!');showDashboard('User');
-});
-document.getElementById('signupBtn').addEventListener('click',()=>{
-    const name=document.getElementById('signupName').value.trim();
-    const phone=document.getElementById('signupPhone').value.trim();
-    const pass=document.getElementById('signupPass').value;
-    if(!name){showToast('Please enter your name','error');return}
-    if(!phone){showToast('Please enter your phone number','error');return}
-    if(!pass){showToast('Please create a password','error');return}
-    modal.classList.remove('open');document.body.style.overflow='';
-    showToast('Account created!');showDashboard(name.split(' ')[0]);
-});
-document.getElementById('googleBtn').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';showToast('Welcome!');showDashboard('User')});
+document.getElementById('loginBtn').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';showToast('Welcome back!')});
+document.getElementById('signupBtn').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';showToast('Account created!')});
+document.getElementById('googleBtn').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';showToast('Google sign-in coming soon!')});
 document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>{const i=q.parentElement;const w=i.classList.contains('open');document.querySelectorAll('.faq-item').forEach(x=>x.classList.remove('open'));if(!w)i.classList.add('open')}));
 document.getElementById('nlBtn').addEventListener('click',()=>{const e=document.getElementById('nlEmail').value;if(!e||!e.includes('@')){showToast('Please enter a valid email','error');return}document.getElementById('nlEmail').value='';showToast('Subscribed!')});
 setTimeout(()=>document.getElementById('cookieBanner').classList.add('show'),2000);
 document.getElementById('cookieAccept').addEventListener('click',()=>{document.getElementById('cookieBanner').classList.remove('show')});
 document.getElementById('cookieDecline').addEventListener('click',()=>{document.getElementById('cookieBanner').classList.remove('show')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');document.body.style.overflow=''}});
-document.getElementById('dashLogout').addEventListener('click',()=>showHome());
-document.getElementById('dashSendBtn').addEventListener('click',()=>showToast('Send package feature coming soon!'));
-document.getElementById('qaSend').addEventListener('click',()=>showToast('Send package feature coming soon!'));
-document.getElementById('qaTrack').addEventListener('click',()=>showToast('Track package feature coming soon!'));
-document.getElementById('qaLocations').addEventListener('click',()=>{showHome();setTimeout(()=>{const loc=document.getElementById('locations');if(loc)window.scrollTo({top:loc.offsetTop-80,behavior:'smooth'})},400)});
-document.getElementById('qaHelp').addEventListener('click',()=>window.open('https://wa.me/233XXXXXXXXX','_blank'));
 </script>
 </body>
 </html>
