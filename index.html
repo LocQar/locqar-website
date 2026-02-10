@@ -573,9 +573,59 @@ textarea.send-input{resize:vertical;min-height:80px}
 .pay-back{display:inline-flex;align-items:center;gap:.5rem;font-family:'Sora';font-weight:600;font-size:.9rem;color:var(--st);cursor:pointer;background:none;border:none;padding:.5rem 0;margin-bottom:1.5rem;transition:color .3s}
 .pay-back:hover{color:var(--c)}
 
+/* ===== RECEIVE PACKAGES ===== */
+.recv-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.recv-header-left h2{font-family:'Sora';font-size:1.8rem;font-weight:800;color:var(--w);margin-bottom:.3rem}
+.recv-header-left p{color:var(--st);font-size:.9rem}
+.recv-track-box{display:flex;gap:.8rem;align-items:center}
+.recv-track-input{padding:.8rem 1.2rem;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:var(--w);font-family:'JetBrains Mono';font-size:.9rem;width:220px;transition:border-color .3s}
+.recv-track-input:focus{outline:none;border-color:var(--c)}
+.recv-track-input::placeholder{color:rgba(255,255,255,.25);font-family:'DM Sans'}
+.recv-track-btn{padding:.8rem 1.5rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--c),var(--cl));color:var(--w);font-family:'Sora';font-weight:700;font-size:.85rem;cursor:pointer;transition:all .3s;white-space:nowrap}
+.recv-track-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,107,88,.3)}
+.recv-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.recv-tab{padding:.5rem 1.2rem;border-radius:8px;border:1.5px solid rgba(255,255,255,.08);background:none;color:var(--st);font-family:'Sora';font-weight:600;font-size:.8rem;cursor:pointer;transition:all .3s}
+.recv-tab:hover{border-color:rgba(255,107,88,.3);color:var(--w)}
+.recv-tab.active{border-color:var(--c);background:rgba(255,107,88,.1);color:var(--c)}
+.recv-tab .recv-tab-count{margin-left:.4rem;font-size:.7rem;opacity:.7}
+.recv-list{display:flex;flex-direction:column;gap:1rem}
+.recv-card{background:var(--nm);border-radius:14px;border:1px solid rgba(255,255,255,.06);padding:1.5rem;transition:all .3s;cursor:default}
+.recv-card:hover{border-color:rgba(255,107,88,.15);transform:translateY(-1px)}
+.recv-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.recv-card-code{font-family:'JetBrains Mono';font-size:1rem;font-weight:700;color:var(--c)}
+.recv-card-date{font-size:.78rem;color:var(--st)}
+.recv-card-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem}
+.recv-card-field label{display:block;font-size:.72rem;color:var(--st);text-transform:uppercase;letter-spacing:.06em;font-family:'Sora';font-weight:600;margin-bottom:.3rem}
+.recv-card-field span{font-size:.9rem;color:var(--w);font-weight:500}
+.recv-card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.04);flex-wrap:wrap;gap:.5rem}
+.recv-card-station{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--st)}
+.recv-card-station-icon{font-size:1rem}
+.recv-pickup-btn{padding:.5rem 1.2rem;border-radius:8px;border:none;background:rgba(52,211,153,.12);color:var(--gn);font-family:'Sora';font-weight:700;font-size:.78rem;cursor:pointer;transition:all .3s}
+.recv-pickup-btn:hover{background:rgba(52,211,153,.2)}
+.recv-pickup-btn.pending{background:rgba(251,191,36,.12);color:#FBBF24;cursor:default}
+.recv-detail-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.recv-detail-modal.open{opacity:1;pointer-events:auto}
+.recv-detail-box{background:var(--nm);border-radius:18px;border:1px solid rgba(255,255,255,.08);padding:2rem;max-width:500px;width:100%;max-height:80vh;overflow-y:auto}
+.recv-detail-box h3{font-family:'Sora';font-size:1.2rem;font-weight:700;color:var(--w);margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center}
+.recv-detail-close{background:none;border:none;color:var(--st);font-size:1.3rem;cursor:pointer;transition:color .3s}
+.recv-detail-close:hover{color:var(--c)}
+.recv-detail-timeline{position:relative;padding-left:2rem}
+.recv-detail-step{position:relative;padding-bottom:1.5rem}
+.recv-detail-step:last-child{padding-bottom:0}
+.recv-detail-step::before{content:'';position:absolute;left:-1.5rem;top:6px;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.15)}
+.recv-detail-step.done::before{background:var(--gn);border-color:var(--gn)}
+.recv-detail-step.active::before{background:var(--c);border-color:var(--c);box-shadow:0 0 10px rgba(255,107,88,.4)}
+.recv-detail-step:not(:last-child)::after{content:'';position:absolute;left:calc(-1.5rem + 5px);top:20px;width:2px;height:calc(100% - 14px);background:rgba(255,255,255,.06)}
+.recv-detail-step.done:not(:last-child)::after{background:var(--gn)}
+.recv-detail-step-title{font-family:'Sora';font-weight:600;font-size:.9rem;color:var(--w);margin-bottom:.2rem}
+.recv-detail-step-time{font-size:.78rem;color:var(--st)}
+.recv-detail-step-loc{font-size:.78rem;color:var(--st);font-style:italic}
+.recv-back{display:inline-flex;align-items:center;gap:.5rem;font-family:'Sora';font-weight:600;font-size:.9rem;color:var(--st);cursor:pointer;background:none;border:none;padding:.5rem 0;margin-bottom:1.5rem;transition:color .3s}
+.recv-back:hover{color:var(--c)}
+
 @media(max-width:1024px){.hero-inner{grid-template-columns:1fr}.phone-mockup{display:none}.hero h1{font-size:3.5rem}.features-grid,.loc-grid,.testimonials{grid-template-columns:repeat(2,1fr)}.step{grid-template-columns:1fr;gap:2rem}.step:nth-child(even){direction:ltr}.safety-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}.finder-grid{grid-template-columns:1fr}.bf-grid,.bb-hero,.bi-grid,.biz-auth-layout{grid-template-columns:1fr}.bb-cards,.bp-grid{grid-template-columns:1fr 1fr}.bp-card.pop{transform:none}.bp-card.pop:hover{transform:translateY(-5px)}.biz-hero h1{font-size:2.8rem}.dash-grid{grid-template-columns:1fr}.dash-stats{grid-template-columns:repeat(2,1fr)}.send-grid{grid-template-columns:1fr}}
-@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.hero h1{font-size:2.5rem}.hero-stats{flex-direction:column;gap:1.5rem}.st2{font-size:2.2rem}.features-grid,.uc-grid,.testimonials,.price-grid,.loc-grid{grid-template-columns:1fr}.safety-grid,.bb-cards,.bp-grid,.bb-metrics{grid-template-columns:1fr}.price-card.featured{transform:none}.cta-cards{grid-template-columns:1fr}.cta-inner h2{font-size:2.2rem}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:1rem;text-align:center}.nav-inner{padding:1rem 1.5rem}.hero-inner,.features,.how-section,.use-cases,.social-proof,.faq-section,.locations,.pricing,.safety,.newsletter,.cta-section,.contact,.track-section,.finder-section{padding-left:1.5rem;padding-right:1.5rem}.contact-grid{grid-template-columns:1fr}.bfr{grid-template-columns:1fr}.biz-hero h1{font-size:2rem}.biz-hero{padding:6rem 1.5rem 3rem}.biz-section{padding:3rem 1.5rem}.biz-hero-stats{gap:1.5rem}.track-box{flex-direction:column}.dash-header{padding:.8rem 1.5rem;flex-wrap:wrap;gap:.8rem}.dash-body{padding:1.5rem 1.5rem 3rem}.dash-stats{grid-template-columns:1fr 1fr}.dash-stat-val{font-size:1.6rem}.dash-welcome h1{font-size:1.5rem}.dash-table th,.dash-table td{padding:.8rem 1rem;font-size:.8rem}.dash-header-right{gap:.8rem}.dash-user-name{font-size:.8rem}}
-@media(max-width:480px){.dash-stats{grid-template-columns:1fr}.dash-header-left h2{font-size:1.1rem}.dash-table{display:block;overflow-x:auto}.send-sizes{grid-template-columns:1fr}.send-title{font-size:1.4rem}.send-success-actions{flex-direction:column}.send-success-code{font-size:1.4rem;padding:.6rem 1.5rem}.pay-methods{grid-template-columns:1fr}}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.hero h1{font-size:2.5rem}.hero-stats{flex-direction:column;gap:1.5rem}.st2{font-size:2.2rem}.features-grid,.uc-grid,.testimonials,.price-grid,.loc-grid{grid-template-columns:1fr}.safety-grid,.bb-cards,.bp-grid,.bb-metrics{grid-template-columns:1fr}.price-card.featured{transform:none}.cta-cards{grid-template-columns:1fr}.cta-inner h2{font-size:2.2rem}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:1rem;text-align:center}.nav-inner{padding:1rem 1.5rem}.hero-inner,.features,.how-section,.use-cases,.social-proof,.faq-section,.locations,.pricing,.safety,.newsletter,.cta-section,.contact,.track-section,.finder-section{padding-left:1.5rem;padding-right:1.5rem}.contact-grid{grid-template-columns:1fr}.bfr{grid-template-columns:1fr}.biz-hero h1{font-size:2rem}.biz-hero{padding:6rem 1.5rem 3rem}.biz-section{padding:3rem 1.5rem}.biz-hero-stats{gap:1.5rem}.track-box{flex-direction:column}.dash-header{padding:.8rem 1.5rem;flex-wrap:wrap;gap:.8rem}.dash-body{padding:1.5rem 1.5rem 3rem}.dash-stats{grid-template-columns:1fr 1fr}.dash-stat-val{font-size:1.6rem}.dash-welcome h1{font-size:1.5rem}.dash-table th,.dash-table td{padding:.8rem 1rem;font-size:.8rem}.dash-header-right{gap:.8rem}.dash-user-name{font-size:.8rem}.recv-header{flex-direction:column}.recv-track-box{width:100%}.recv-track-input{flex:1}.recv-card-body{grid-template-columns:1fr 1fr}.recv-header-left h2{font-size:1.4rem}}
+@media(max-width:480px){.dash-stats{grid-template-columns:1fr}.dash-header-left h2{font-size:1.1rem}.dash-table{display:block;overflow-x:auto}.send-sizes{grid-template-columns:1fr}.send-title{font-size:1.4rem}.send-success-actions{flex-direction:column}.send-success-code{font-size:1.4rem;padding:.6rem 1.5rem}.pay-methods{grid-template-columns:1fr}.recv-card-body{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -801,6 +851,7 @@ package = client.packages.<span class="fn">create</span>(
 <div class="dash-panel-header"><h3>Quick Actions</h3></div>
 <div class="dash-actions">
 <button class="dash-action-btn" id="dashSendPkg"><div class="dash-action-icon">&#128230;</div><div><h4>Send Package</h4><p>Create a new delivery</p></div></button>
+<button class="dash-action-btn" id="dashRecvPkg"><div class="dash-action-icon">&#128229;</div><div><h4>Receive Packages</h4><p>View incoming deliveries</p></div></button>
 <button class="dash-action-btn" id="dashBulkUpload"><div class="dash-action-icon">&#128196;</div><div><h4>Bulk Upload</h4><p>Import CSV file</p></div></button>
 <button class="dash-action-btn" id="dashTeam"><div class="dash-action-icon">&#128101;</div><div><h4>Team Members</h4><p>Manage your team</p></div></button>
 <button class="dash-action-btn" id="dashExport"><div class="dash-action-icon">&#128202;</div><div><h4>Export Report</h4><p>Download monthly data</p></div></button>
@@ -999,6 +1050,48 @@ package = client.packages.<span class="fn">create</span>(
 <div class="pay-spinner"></div>
 <p><strong>Processing payment...</strong></p>
 <p id="payProcessMsg">Waiting for Mobile Money confirmation</p>
+</div>
+</div>
+
+<!-- ===== RECEIVE PACKAGES VIEW ===== -->
+<div class="dash-view" id="dashRecvView">
+<button class="recv-back" id="recvBack">&#8592; Back to Dashboard</button>
+
+<div class="recv-header">
+<div class="recv-header-left">
+<h2>Receive Packages</h2>
+<p>Track and manage your incoming deliveries.</p>
+</div>
+<div class="recv-track-box">
+<input type="text" class="recv-track-input" id="recvTrackInput" placeholder="Enter tracking code">
+<button class="recv-track-btn" id="recvTrackBtn">Track</button>
+</div>
+</div>
+
+<div class="recv-tabs" id="recvTabs">
+<button class="recv-tab active" data-filter="all">All<span class="recv-tab-count" id="recvCountAll">(0)</span></button>
+<button class="recv-tab" data-filter="in-transit">In Transit<span class="recv-tab-count" id="recvCountTransit">(0)</span></button>
+<button class="recv-tab" data-filter="ready">Ready<span class="recv-tab-count" id="recvCountReady">(0)</span></button>
+<button class="recv-tab" data-filter="collected">Collected<span class="recv-tab-count" id="recvCountCollected">(0)</span></button>
+</div>
+
+<div class="recv-list" id="recvList">
+<div class="dash-empty" id="recvEmpty"><div class="dash-empty-icon">&#128229;</div><p>No incoming packages yet.<br>When someone sends you a package, it will appear here.</p></div>
+</div>
+</div>
+
+<!-- Package Detail Modal -->
+<div class="recv-detail-modal" id="recvDetailModal">
+<div class="recv-detail-box">
+<h3><span id="recvDetailCode">LQ-0000</span><button class="recv-detail-close" id="recvDetailClose">&#10005;</button></h3>
+<div style="margin-bottom:1.5rem">
+<div class="pay-order-row"><span class="pay-lbl">From</span><span class="pay-val" id="recvDetailFrom">--</span></div>
+<div class="pay-order-row"><span class="pay-lbl">Size</span><span class="pay-val" id="recvDetailSize">--</span></div>
+<div class="pay-order-row"><span class="pay-lbl">Station</span><span class="pay-val" id="recvDetailStation">--</span></div>
+<div class="pay-order-row"><span class="pay-lbl">Date</span><span class="pay-val" id="recvDetailDate">--</span></div>
+</div>
+<label style="font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--w);display:block;margin-bottom:1rem">Tracking Timeline</label>
+<div class="recv-detail-timeline" id="recvDetailTimeline"></div>
 </div>
 </div>
 
