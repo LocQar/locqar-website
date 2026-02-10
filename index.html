@@ -505,7 +505,6 @@ textarea.send-input{resize:vertical;min-height:80px}
 .send-size-icon{font-size:1.8rem;margin-bottom:.5rem}
 .send-size-name{font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--w);margin-bottom:.2rem}
 .send-size-dim{font-size:.72rem;color:var(--st);margin-bottom:.4rem}
-.send-size-price{font-family:'Sora';font-weight:800;font-size:1rem;color:var(--c)}
 .send-station-select{width:100%;padding:.9rem 1.2rem;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:var(--w);font-family:'DM Sans';font-size:.9rem;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;box-sizing:border-box}
 .send-station-select:focus{outline:none;border-color:var(--c)}
 .send-station-select option{background:var(--nm);color:var(--w)}
@@ -519,9 +518,6 @@ textarea.send-input{resize:vertical;min-height:80px}
 .send-summary-label{font-size:.85rem;color:var(--st)}
 .send-summary-val{font-family:'Sora';font-weight:600;font-size:.85rem;color:var(--w)}
 .send-summary-val.empty{color:rgba(255,255,255,.2);font-style:italic;font-weight:400}
-.send-summary-total{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;margin-top:.5rem;border-top:2px solid rgba(255,255,255,.08)}
-.send-summary-total .send-summary-label{font-family:'Sora';font-weight:700;color:var(--w);font-size:.95rem}
-.send-summary-total .send-summary-val{font-family:'Sora';font-weight:800;font-size:1.2rem;color:var(--c)}
 .send-success{text-align:center;padding:4rem 2rem}
 .send-success-icon{font-size:4rem;margin-bottom:1.5rem}
 .send-success h2{font-family:'Sora';font-size:1.8rem;font-weight:800;color:var(--w);margin-bottom:.5rem}
@@ -542,9 +538,6 @@ textarea.send-input{resize:vertical;min-height:80px}
 .pay-order-row{display:flex;justify-content:space-between;padding:.5rem 0;font-size:.88rem}
 .pay-order-row .pay-lbl{color:var(--st)}
 .pay-order-row .pay-val{color:var(--w);font-family:'Sora';font-weight:600}
-.pay-order-total{display:flex;justify-content:space-between;padding-top:.8rem;margin-top:.5rem;border-top:2px solid rgba(255,255,255,.08);font-size:1rem}
-.pay-order-total .pay-lbl{font-family:'Sora';font-weight:700;color:var(--w)}
-.pay-order-total .pay-val{font-family:'Sora';font-weight:800;color:var(--c);font-size:1.2rem}
 .pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.8rem}
 .pay-method{padding:1rem;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.02);cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:.8rem}
 .pay-method:hover{border-color:rgba(255,107,88,.3)}
@@ -903,23 +896,20 @@ package = client.packages.<span class="fn">create</span>(
 <div class="send-form-group">
 <label>Package Size <span>*</span></label>
 <div class="send-sizes">
-<div class="send-size" data-size="small" data-price="5">
+<div class="send-size" data-size="small">
 <div class="send-size-icon">&#128230;</div>
 <div class="send-size-name">Small</div>
 <div class="send-size-dim">Max 5kg / 30cm</div>
-<div class="send-size-price">GH&#8373; 5</div>
 </div>
-<div class="send-size" data-size="medium" data-price="12">
+<div class="send-size" data-size="medium">
 <div class="send-size-icon">&#128230;&#128230;</div>
 <div class="send-size-name">Medium</div>
 <div class="send-size-dim">Max 15kg / 50cm</div>
-<div class="send-size-price">GH&#8373; 12</div>
 </div>
-<div class="send-size" data-size="large" data-price="20">
+<div class="send-size" data-size="large">
 <div class="send-size-icon">&#128230;&#128230;&#128230;</div>
 <div class="send-size-name">Large</div>
 <div class="send-size-dim">Max 30kg / 80cm</div>
-<div class="send-size-price">GH&#8373; 20</div>
 </div>
 </div>
 </div>
@@ -961,10 +951,6 @@ package = client.packages.<span class="fn">create</span>(
 <span class="send-summary-label">Station</span>
 <span class="send-summary-val empty" id="sumStation">Not selected</span>
 </div>
-<div class="send-summary-total">
-<span class="send-summary-label">Total</span>
-<span class="send-summary-val" id="sumTotal">GH&#8373; 0</span>
-</div>
 </div>
 </div>
 
@@ -994,7 +980,6 @@ package = client.packages.<span class="fn">create</span>(
 <div class="pay-order-row"><span class="pay-lbl">Phone</span><span class="pay-val" id="payPhone">--</span></div>
 <div class="pay-order-row"><span class="pay-lbl">Size</span><span class="pay-val" id="paySize">--</span></div>
 <div class="pay-order-row"><span class="pay-lbl">Station</span><span class="pay-val" id="payStation">--</span></div>
-<div class="pay-order-total"><span class="pay-lbl">Total</span><span class="pay-val" id="payTotal">GH&#8373; 0</span></div>
 </div>
 
 <label style="font-family:'Sora';font-weight:700;font-size:.9rem;color:var(--w);display:block;margin-bottom:1rem">Payment Method</label>
@@ -1041,7 +1026,7 @@ package = client.packages.<span class="fn">create</span>(
 </div>
 </div>
 
-<button class="pay-btn" id="paySubmitBtn">Pay GH&#8373; <span id="payBtnAmount">0</span></button>
+<button class="pay-btn" id="paySubmitBtn">Confirm Payment</button>
 <div class="pay-secure">&#128274; Secured with 256-bit encryption</div>
 </div>
 
