@@ -442,7 +442,6 @@ function showDashView(id) {
 }
 
 var selectedSize = null;
-var selectedPrice = 0;
 
 $('dashSendPkg').addEventListener('click', function () { openSendForm() });
 
@@ -454,7 +453,6 @@ function openSendForm() {
   $('sendStation').value = '';
   $('sendNote').value = '';
   selectedSize = null;
-  selectedPrice = 0;
   document.querySelectorAll('.send-size').forEach(function (s) { s.classList.remove('selected') });
   $('sendSuccess').style.display = 'none';
   document.querySelector('.send-grid').style.display = '';
@@ -470,7 +468,6 @@ document.querySelectorAll('.send-size').forEach(function (s) {
     document.querySelectorAll('.send-size').forEach(function (x) { x.classList.remove('selected') });
     s.classList.add('selected');
     selectedSize = s.dataset.size;
-    selectedPrice = parseInt(s.dataset.price);
     updateSendSummary();
   });
 });
@@ -489,7 +486,6 @@ function updateSendSummary() {
   setSummaryVal('sumPhone', phone || 'Not set');
   setSummaryVal('sumSize', selectedSize ? (selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)) : 'Not selected');
   setSummaryVal('sumStation', station || 'Not selected');
-  $('sumTotal').textContent = 'GH\u20B5 ' + selectedPrice;
 }
 
 function setSummaryVal(id, val) {
@@ -518,8 +514,6 @@ $('sendSubmitBtn').addEventListener('click', function () {
   $('payPhone').textContent = phone;
   $('paySize').textContent = selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1);
   $('payStation').textContent = station;
-  $('payTotal').textContent = 'GH\u20B5 ' + selectedPrice;
-  $('payBtnAmount').textContent = selectedPrice;
 
   // Reset payment state
   selectedPayMethod = null;
