@@ -190,7 +190,16 @@ function showPage(p) {
 $('logoBtn').addEventListener('click', function (e) { e.preventDefault(); showPage('home') });
 $('backNav').addEventListener('click', function () { var isDash = $('bizDashboard').style.display === 'block'; if (isDash) { showPage('biz') } else { showPage('home') } });
 $('backMobile').addEventListener('click', function () { var isDash = $('bizDashboard').style.display === 'block'; if (isDash) { showPage('biz') } else { showPage('home') } });
-document.addEventListener('click', function (e) { if (e.target.classList.contains('go-biz')) { e.preventDefault(); showPage('biz') } });
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('go-biz')) {
+    e.preventDefault();
+    if (auth.currentUser && auth.currentUser.email && auth.currentUser.email.endsWith('@biz.locqar.app')) {
+      showPage('dashboard');
+    } else {
+      showPage('biz');
+    }
+  }
+});
 ham.addEventListener('click', function () { ham.classList.toggle('active'); mm.classList.toggle('open') });
 document.querySelectorAll('#mobileMenu a').forEach(function (a) { a.addEventListener('click', function () { ham.classList.remove('active'); mm.classList.remove('open') }) });
 document.querySelectorAll('a[href^="#"]').forEach(function (a) {
@@ -220,7 +229,14 @@ var modal = $('authModal');
 function openModal() { modal.classList.add('open'); document.body.style.overflow = 'hidden' }
 function closeModalFn() { modal.classList.remove('open'); document.body.style.overflow = '' }
 var olm = $('openLoginMobile');
-if (olm) olm.addEventListener('click', function (e) { e.preventDefault(); ham.classList.remove('active'); mm.classList.remove('open'); openModal() });
+if (olm) olm.addEventListener('click', function (e) {
+  e.preventDefault(); ham.classList.remove('active'); mm.classList.remove('open');
+  if (auth.currentUser && auth.currentUser.email && auth.currentUser.email.endsWith('@biz.locqar.app')) {
+    showPage('dashboard');
+  } else {
+    openModal();
+  }
+});
 $('closeModal').addEventListener('click', closeModalFn);
 modal.addEventListener('click', function (e) { if (e.target === modal) closeModalFn() });
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModalFn() });
@@ -267,8 +283,18 @@ $('googleBtn').addEventListener('click', function () {
     .catch(function (err) { showToast(err.message, 'error') });
 });
 
-function updateNav() { }
-onAuthStateChanged(auth, function (u) { if (u) updateNav() });
+function updateNav(u) {
+  var link = $('navBizLink');
+  var mobileLink = $('openLoginMobile');
+  if (u && u.email && u.email.endsWith('@biz.locqar.app')) {
+    if (link) link.textContent = 'Dashboard';
+    if (mobileLink) mobileLink.textContent = 'Dashboard';
+  } else {
+    if (link) link.textContent = 'Login';
+    if (mobileLink) mobileLink.textContent = 'Log In';
+  }
+}
+onAuthStateChanged(auth, function (u) { updateNav(u) });
 
 // ===== BIZ PAGE TABS =====
 function bizShowTab(id) {
@@ -404,7 +430,7 @@ function initDashboard() {
 }
 
 $('dashLogout').addEventListener('click', function () {
-  signOut(auth).then(function () { showPage('biz'); bizAuthSwitch('login'); showToast('Logged out successfully') });
+  signOut(auth).then(function () { updateNav(null); showPage('biz'); bizAuthSwitch('login'); showToast('Logged out successfully') });
 });
 $('dashSendPkg').addEventListener('click', function () { showToast('Send Package form coming soon!') });
 $('dashBulkUpload').addEventListener('click', function () { showToast('Bulk upload coming soon!') });
