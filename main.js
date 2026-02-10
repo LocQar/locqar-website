@@ -412,6 +412,7 @@ $('bizSuccessBtn').addEventListener('click', function () { showPage('dashboard')
 function initDashboard() {
   var u = auth.currentUser;
   if (!u) return;
+  showDashView('dashMainView');
   var dn = u.displayName || 'User';
   var parts = dn.split('[');
   var name = parts[0].trim();
@@ -432,7 +433,364 @@ function initDashboard() {
 $('dashLogout').addEventListener('click', function () {
   signOut(auth).then(function () { updateNav(null); showPage('biz'); bizAuthSwitch('login'); showToast('Logged out successfully') });
 });
-$('dashSendPkg').addEventListener('click', function () { showToast('Send Package form coming soon!') });
+// ===== SEND PACKAGE =====
+function showDashView(id) {
+  document.querySelectorAll('.dash-view').forEach(function (v) { v.classList.remove('active') });
+  var view = $(id);
+  if (view) view.classList.add('active');
+  window.scrollTo({ top: 0 });
+}
+
+var selectedSize = null;
+var selectedPrice = 0;
+
+$('dashSendPkg').addEventListener('click', function () { openSendForm() });
+
+function openSendForm() {
+  showDashView('dashSendView');
+  // Reset form
+  $('sendPhone').value = '';
+  $('sendName').value = '';
+  $('sendStation').value = '';
+  $('sendNote').value = '';
+  selectedSize = null;
+  selectedPrice = 0;
+  document.querySelectorAll('.send-size').forEach(function (s) { s.classList.remove('selected') });
+  $('sendSuccess').style.display = 'none';
+  document.querySelector('.send-grid').style.display = '';
+  document.querySelector('.send-back').style.display = '';
+  document.querySelector('.send-title').style.display = '';
+  document.querySelector('.send-subtitle').style.display = '';
+  updateSendSummary();
+}
+
+// Size selection
+document.querySelectorAll('.send-size').forEach(function (s) {
+  s.addEventListener('click', function () {
+    document.querySelectorAll('.send-size').forEach(function (x) { x.classList.remove('selected') });
+    s.classList.add('selected');
+    selectedSize = s.dataset.size;
+    selectedPrice = parseInt(s.dataset.price);
+    updateSendSummary();
+  });
+});
+
+// Live summary updates
+$('sendPhone').addEventListener('input', updateSendSummary);
+$('sendName').addEventListener('input', updateSendSummary);
+$('sendStation').addEventListener('change', updateSendSummary);
+
+function updateSendSummary() {
+  var name = $('sendName').value.trim();
+  var phone = $('sendPhone').value.trim();
+  var station = $('sendStation').value;
+
+  setSummaryVal('sumReceiver', name || 'Not set');
+  setSummaryVal('sumPhone', phone || 'Not set');
+  setSummaryVal('sumSize', selectedSize ? (selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)) : 'Not selected');
+  setSummaryVal('sumStation', station || 'Not selected');
+  $('sumTotal').textContent = 'GH\u20B5 ' + selectedPrice;
+}
+
+function setSummaryVal(id, val) {
+  var el = $(id);
+  el.textContent = val;
+  if (val === 'Not set' || val === 'Not selected') {
+    el.classList.add('empty');
+  } else {
+    el.classList.remove('empty');
+  }
+}
+
+// Submit — go to payment
+$('sendSubmitBtn').addEventListener('click', function () {
+  var phone = $('sendPhone').value.trim();
+  var name = $('sendName').value.trim();
+  var station = $('sendStation').value;
+
+  if (!phone) { showToast('Enter receiver\'s phone number', 'error'); return }
+  if (!name) { showToast('Enter receiver\'s name', 'error'); return }
+  if (!selectedSize) { showToast('Select a package size', 'error'); return }
+  if (!station) { showToast('Select a pickup station', 'error'); return }
+
+  // Populate payment summary
+  $('payReceiver').textContent = name;
+  $('payPhone').textContent = phone;
+  $('paySize').textContent = selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1);
+  $('payStation').textContent = station;
+  $('payTotal').textContent = 'GH\u20B5 ' + selectedPrice;
+  $('payBtnAmount').textContent = selectedPrice;
+
+  // Reset payment state
+  selectedPayMethod = null;
+  document.querySelectorAll('.pay-method').forEach(function (m) { m.classList.remove('selected') });
+  $('payMomoFields').style.display = 'none';
+  $('payCardFields').style.display = 'none';
+  $('payMomoNum').value = '';
+  $('payCardNum').value = '';
+  $('payCardExp').value = '';
+  $('payCardCvv').value = '';
+  $('payProcessing').style.display = 'none';
+  document.querySelector('.pay-step').style.display = '';
+
+  showDashView('dashPayView');
+});
+
+// Navigation
+$('sendBack').addEventListener('click', function () { showDashView('dashMainView') });
+$('sendGoBack').addEventListener('click', function () { showDashView('dashMainView') });
+$('sendAnother').addEventListener('click', function () { openSendForm() });
+
+// ===== PAYMENT =====
+var selectedPayMethod = null;
+
+// Payment method selection
+document.querySelectorAll('.pay-method').forEach(function (m) {
+  m.addEventListener('click', function () {
+    document.querySelectorAll('.pay-method').forEach(function (x) { x.classList.remove('selected') });
+    m.classList.add('selected');
+    selectedPayMethod = m.dataset.method;
+
+    if (selectedPayMethod === 'card') {
+      $('payMomoFields').style.display = 'none';
+      $('payCardFields').style.display = '';
+    } else {
+      $('payMomoFields').style.display = '';
+      $('payCardFields').style.display = 'none';
+    }
+  });
+});
+
+// Back to form
+$('payBack').addEventListener('click', function () { showDashView('dashSendView') });
+
+// Pay
+$('paySubmitBtn').addEventListener('click', function () {
+  if (!selectedPayMethod) { showToast('Select a payment method', 'error'); return }
+
+  if (selectedPayMethod === 'card') {
+    if (!$('payCardNum').value.trim()) { showToast('Enter card number', 'error'); return }
+    if (!$('payCardExp').value.trim()) { showToast('Enter expiry date', 'error'); return }
+    if (!$('payCardCvv').value.trim()) { showToast('Enter CVV', 'error'); return }
+  } else {
+    if (!$('payMomoNum').value.trim()) { showToast('Enter mobile money number', 'error'); return }
+  }
+
+  // Show processing
+  document.querySelector('.pay-step').style.display = 'none';
+  $('payProcessing').style.display = '';
+
+  var msgs = selectedPayMethod === 'card'
+    ? ['Verifying card details...', 'Processing payment...', 'Confirming transaction...']
+    : ['Sending payment request...', 'Waiting for confirmation on your phone...', 'Processing payment...'];
+
+  $('payProcessMsg').textContent = msgs[0];
+  var step = 0;
+  var msgInterval = setInterval(function () {
+    step++;
+    if (step < msgs.length) {
+      $('payProcessMsg').textContent = msgs[step];
+    }
+  }, 1200);
+
+  // Simulate payment completion
+  setTimeout(function () {
+    clearInterval(msgInterval);
+
+    // Generate tracking code
+    var code = 'LQ-' + (Math.floor(Math.random() * 9000) + 1000);
+
+    // Switch to send view and show success
+    showDashView('dashSendView');
+    document.querySelector('.send-grid').style.display = 'none';
+    document.querySelector('.send-back').style.display = 'none';
+    document.querySelector('.send-title').style.display = 'none';
+    document.querySelector('.send-subtitle').style.display = 'none';
+    $('sendTrackCode').textContent = code;
+    $('sendSuccess').style.display = 'block';
+    showToast('Payment successful! Package sent.');
+  }, 3500);
+});
+
+// ===== RECEIVE PACKAGES =====
+var recvPackages = [];
+
+$('dashRecvPkg').addEventListener('click', function () { openRecvView() });
+$('recvBack').addEventListener('click', function () { showDashView('dashMainView') });
+
+function openRecvView() {
+  showDashView('dashRecvView');
+  $('recvTrackInput').value = '';
+  renderRecvList('all');
+}
+
+// Track button
+$('recvTrackBtn').addEventListener('click', function () { recvTrackLookup() });
+$('recvTrackInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') recvTrackLookup() });
+
+function recvTrackLookup() {
+  var code = $('recvTrackInput').value.trim().toUpperCase();
+  if (!code) { showToast('Enter a tracking code', 'error'); return }
+
+  // Check if already in list
+  var existing = recvPackages.find(function (p) { return p.code === code });
+  if (existing) {
+    openRecvDetail(existing);
+    return;
+  }
+
+  // Simulate a lookup — generate a package
+  var statuses = ['in-transit', 'ready', 'collected'];
+  var status = statuses[Math.floor(Math.random() * statuses.length)];
+  var stationNames = ['Accra Mall', 'Legon Campus', 'Achimota Mall', 'Kotoka Airport'];
+  var senderNames = ['Kwame Asante', 'Ama Appiah', 'Esi Owusu', 'Kofi Mensah', 'Yaa Boakye'];
+  var sizes = ['Small', 'Medium', 'Large'];
+
+  var pkg = {
+    code: code,
+    sender: senderNames[Math.floor(Math.random() * senderNames.length)],
+    size: sizes[Math.floor(Math.random() * sizes.length)],
+    station: stationNames[Math.floor(Math.random() * stationNames.length)],
+    status: status,
+    date: 'Today',
+    steps: buildSteps(status)
+  };
+
+  recvPackages.push(pkg);
+  renderRecvList('all');
+  openRecvDetail(pkg);
+  showToast('Package found!');
+}
+
+function buildSteps(status) {
+  var steps = [
+    { title: 'Package Sent', time: 'Today, 9:00 AM', loc: '', state: 'done' },
+    { title: 'In Transit', time: '', loc: '', state: '' },
+    { title: 'Arrived at Station', time: '', loc: '', state: '' },
+    { title: 'Collected', time: '', loc: '', state: '' }
+  ];
+  if (status === 'in-transit') {
+    steps[1].time = 'Today, 10:15 AM';
+    steps[1].state = 'active';
+  } else if (status === 'ready') {
+    steps[1].time = 'Today, 10:15 AM';
+    steps[1].state = 'done';
+    steps[2].time = 'Today, 11:45 AM';
+    steps[2].loc = 'Locker available';
+    steps[2].state = 'active';
+  } else if (status === 'collected') {
+    steps[1].time = 'Yesterday, 10:15 AM';
+    steps[1].state = 'done';
+    steps[2].time = 'Yesterday, 11:45 AM';
+    steps[2].state = 'done';
+    steps[3].time = 'Today, 8:30 AM';
+    steps[3].loc = 'Picked up';
+    steps[3].state = 'done';
+  }
+  return steps;
+}
+
+// Filter tabs
+document.querySelectorAll('.recv-tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.recv-tab').forEach(function (t) { t.classList.remove('active') });
+    tab.classList.add('active');
+    renderRecvList(tab.dataset.filter);
+  });
+});
+
+function renderRecvList(filter) {
+  var list = $('recvList');
+  var empty = $('recvEmpty');
+
+  // Update counts
+  var allCount = recvPackages.length;
+  var transitCount = recvPackages.filter(function (p) { return p.status === 'in-transit' }).length;
+  var readyCount = recvPackages.filter(function (p) { return p.status === 'ready' }).length;
+  var collectedCount = recvPackages.filter(function (p) { return p.status === 'collected' }).length;
+
+  $('recvCountAll').textContent = '(' + allCount + ')';
+  $('recvCountTransit').textContent = '(' + transitCount + ')';
+  $('recvCountReady').textContent = '(' + readyCount + ')';
+  $('recvCountCollected').textContent = '(' + collectedCount + ')';
+
+  var filtered = filter === 'all' ? recvPackages : recvPackages.filter(function (p) { return p.status === filter });
+
+  // Clear list except empty state
+  var cards = list.querySelectorAll('.recv-card');
+  cards.forEach(function (c) { c.remove() });
+
+  if (filtered.length === 0) {
+    empty.style.display = '';
+    return;
+  }
+
+  empty.style.display = 'none';
+
+  filtered.forEach(function (pkg) {
+    var card = document.createElement('div');
+    card.className = 'recv-card';
+
+    var statusLabel = pkg.status === 'in-transit' ? 'In Transit' : pkg.status === 'ready' ? 'Ready for Pickup' : 'Collected';
+    var statusClass = pkg.status === 'in-transit' ? 'in-transit' : pkg.status === 'ready' ? 'pending' : 'collected';
+    var actionBtn = pkg.status === 'ready'
+      ? '<button class="recv-pickup-btn">Ready for Pickup</button>'
+      : pkg.status === 'in-transit'
+        ? '<button class="recv-pickup-btn pending">In Transit</button>'
+        : '<button class="recv-pickup-btn" style="background:rgba(52,211,153,.12);color:var(--gn)">Collected</button>';
+
+    card.innerHTML = '<div class="recv-card-top">' +
+      '<span class="recv-card-code">' + pkg.code + '</span>' +
+      '<span class="dash-status ' + statusClass + '">' + statusLabel + '</span>' +
+      '</div>' +
+      '<div class="recv-card-body">' +
+      '<div class="recv-card-field"><label>From</label><span>' + pkg.sender + '</span></div>' +
+      '<div class="recv-card-field"><label>Size</label><span>' + pkg.size + '</span></div>' +
+      '<div class="recv-card-field"><label>Date</label><span>' + pkg.date + '</span></div>' +
+      '</div>' +
+      '<div class="recv-card-bottom">' +
+      '<div class="recv-card-station"><span class="recv-card-station-icon">\uD83D\uDCCD</span>' + pkg.station + '</div>' +
+      actionBtn +
+      '</div>';
+
+    card.addEventListener('click', function () { openRecvDetail(pkg) });
+    list.appendChild(card);
+  });
+}
+
+// Detail modal
+function openRecvDetail(pkg) {
+  $('recvDetailCode').textContent = pkg.code;
+  $('recvDetailFrom').textContent = pkg.sender;
+  $('recvDetailSize').textContent = pkg.size;
+  $('recvDetailStation').textContent = pkg.station;
+  $('recvDetailDate').textContent = pkg.date;
+
+  var timeline = $('recvDetailTimeline');
+  timeline.innerHTML = '';
+  pkg.steps.forEach(function (s) {
+    var step = document.createElement('div');
+    step.className = 'recv-detail-step' + (s.state ? ' ' + s.state : '');
+    step.innerHTML = '<div class="recv-detail-step-title">' + s.title + '</div>' +
+      (s.time ? '<div class="recv-detail-step-time">' + s.time + '</div>' : '') +
+      (s.loc ? '<div class="recv-detail-step-loc">' + s.loc + '</div>' : '');
+    timeline.appendChild(step);
+  });
+
+  $('recvDetailModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRecvDetail() {
+  $('recvDetailModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+$('recvDetailClose').addEventListener('click', closeRecvDetail);
+$('recvDetailModal').addEventListener('click', function (e) {
+  if (e.target === $('recvDetailModal')) closeRecvDetail();
+});
+
 $('dashBulkUpload').addEventListener('click', function () { showToast('Bulk upload coming soon!') });
 $('dashTeam').addEventListener('click', function () { showToast('Team management coming soon!') });
 $('dashExport').addEventListener('click', function () { showToast('Generating report...'); setTimeout(function () { showToast('Report downloaded!') }, 1500) });
