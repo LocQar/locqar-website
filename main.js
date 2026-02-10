@@ -502,7 +502,7 @@ function setSummaryVal(id, val) {
   }
 }
 
-// Submit
+// Submit — go to payment
 $('sendSubmitBtn').addEventListener('click', function () {
   var phone = $('sendPhone').value.trim();
   var name = $('sendName').value.trim();
@@ -513,32 +513,104 @@ $('sendSubmitBtn').addEventListener('click', function () {
   if (!selectedSize) { showToast('Select a package size', 'error'); return }
   if (!station) { showToast('Select a pickup station', 'error'); return }
 
-  var btn = $('sendSubmitBtn');
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
+  // Populate payment summary
+  $('payReceiver').textContent = name;
+  $('payPhone').textContent = phone;
+  $('paySize').textContent = selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1);
+  $('payStation').textContent = station;
+  $('payTotal').textContent = 'GH\u20B5 ' + selectedPrice;
+  $('payBtnAmount').textContent = selectedPrice;
 
-  // Generate tracking code
-  var code = 'LQ-' + (Math.floor(Math.random() * 9000) + 1000);
+  // Reset payment state
+  selectedPayMethod = null;
+  document.querySelectorAll('.pay-method').forEach(function (m) { m.classList.remove('selected') });
+  $('payMomoFields').style.display = 'none';
+  $('payCardFields').style.display = 'none';
+  $('payMomoNum').value = '';
+  $('payCardNum').value = '';
+  $('payCardExp').value = '';
+  $('payCardCvv').value = '';
+  $('payProcessing').style.display = 'none';
+  document.querySelector('.pay-step').style.display = '';
 
-  setTimeout(function () {
-    btn.textContent = 'Send Package';
-    btn.disabled = false;
-
-    // Show success
-    document.querySelector('.send-grid').style.display = 'none';
-    document.querySelector('.send-back').style.display = 'none';
-    document.querySelector('.send-title').style.display = 'none';
-    document.querySelector('.send-subtitle').style.display = 'none';
-    $('sendTrackCode').textContent = code;
-    $('sendSuccess').style.display = 'block';
-    showToast('Package sent successfully!');
-  }, 1200);
+  showDashView('dashPayView');
 });
 
 // Navigation
 $('sendBack').addEventListener('click', function () { showDashView('dashMainView') });
 $('sendGoBack').addEventListener('click', function () { showDashView('dashMainView') });
 $('sendAnother').addEventListener('click', function () { openSendForm() });
+
+// ===== PAYMENT =====
+var selectedPayMethod = null;
+
+// Payment method selection
+document.querySelectorAll('.pay-method').forEach(function (m) {
+  m.addEventListener('click', function () {
+    document.querySelectorAll('.pay-method').forEach(function (x) { x.classList.remove('selected') });
+    m.classList.add('selected');
+    selectedPayMethod = m.dataset.method;
+
+    if (selectedPayMethod === 'card') {
+      $('payMomoFields').style.display = 'none';
+      $('payCardFields').style.display = '';
+    } else {
+      $('payMomoFields').style.display = '';
+      $('payCardFields').style.display = 'none';
+    }
+  });
+});
+
+// Back to form
+$('payBack').addEventListener('click', function () { showDashView('dashSendView') });
+
+// Pay
+$('paySubmitBtn').addEventListener('click', function () {
+  if (!selectedPayMethod) { showToast('Select a payment method', 'error'); return }
+
+  if (selectedPayMethod === 'card') {
+    if (!$('payCardNum').value.trim()) { showToast('Enter card number', 'error'); return }
+    if (!$('payCardExp').value.trim()) { showToast('Enter expiry date', 'error'); return }
+    if (!$('payCardCvv').value.trim()) { showToast('Enter CVV', 'error'); return }
+  } else {
+    if (!$('payMomoNum').value.trim()) { showToast('Enter mobile money number', 'error'); return }
+  }
+
+  // Show processing
+  document.querySelector('.pay-step').style.display = 'none';
+  $('payProcessing').style.display = '';
+
+  var msgs = selectedPayMethod === 'card'
+    ? ['Verifying card details...', 'Processing payment...', 'Confirming transaction...']
+    : ['Sending payment request...', 'Waiting for confirmation on your phone...', 'Processing payment...'];
+
+  $('payProcessMsg').textContent = msgs[0];
+  var step = 0;
+  var msgInterval = setInterval(function () {
+    step++;
+    if (step < msgs.length) {
+      $('payProcessMsg').textContent = msgs[step];
+    }
+  }, 1200);
+
+  // Simulate payment completion
+  setTimeout(function () {
+    clearInterval(msgInterval);
+
+    // Generate tracking code
+    var code = 'LQ-' + (Math.floor(Math.random() * 9000) + 1000);
+
+    // Switch to send view and show success
+    showDashView('dashSendView');
+    document.querySelector('.send-grid').style.display = 'none';
+    document.querySelector('.send-back').style.display = 'none';
+    document.querySelector('.send-title').style.display = 'none';
+    document.querySelector('.send-subtitle').style.display = 'none';
+    $('sendTrackCode').textContent = code;
+    $('sendSuccess').style.display = 'block';
+    showToast('Payment successful! Package sent.');
+  }, 3500);
+});
 
 $('dashBulkUpload').addEventListener('click', function () { showToast('Bulk upload coming soon!') });
 $('dashTeam').addEventListener('click', function () { showToast('Team management coming soon!') });
