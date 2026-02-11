@@ -233,7 +233,7 @@ function closeModalFn() { modal.classList.remove('open'); document.body.style.ov
 var navLogin = $('navBizLink');
 if (navLogin) navLogin.addEventListener('click', function (e) {
   e.preventDefault();
-  if (auth.currentUser && isBizUser(auth.currentUser)) {
+  if (auth.currentUser) {
     showPage('dashboard');
   } else {
     openModal();
@@ -242,7 +242,7 @@ if (navLogin) navLogin.addEventListener('click', function (e) {
 var olm = $('openLoginMobile');
 if (olm) olm.addEventListener('click', function (e) {
   e.preventDefault(); ham.classList.remove('active'); mm.classList.remove('open');
-  if (auth.currentUser && isBizUser(auth.currentUser)) {
+  if (auth.currentUser) {
     showPage('dashboard');
   } else {
     openModal();
@@ -269,7 +269,7 @@ $('signupBtn').addEventListener('click', function () {
   btn.textContent = 'Creating...'; btn.disabled = true;
   createUserWithEmailAndPassword(auth, email, pass)
     .then(function (r) { return updateProfile(r.user, { displayName: name }) })
-    .then(function () { closeModalFn(); showToast('Account created! Welcome, ' + name + '!'); updateNav() })
+    .then(function () { closeModalFn(); showToast('Account created! Welcome, ' + name + '!'); updateNav(auth.currentUser); showPage('dashboard') })
     .catch(function (err) { showToast(err.code === 'auth/email-already-in-use' ? 'Email already registered' : err.message, 'error') })
     .finally(function () { btn.textContent = 'Create Account'; btn.disabled = false });
 });
@@ -280,7 +280,7 @@ $('loginBtn').addEventListener('click', function () {
   if (!email || !pass) { showToast('Please fill in all fields', 'error'); return }
   btn.textContent = 'Logging in...'; btn.disabled = true;
   signInWithEmailAndPassword(auth, email, pass)
-    .then(function (r) { closeModalFn(); showToast('Welcome back, ' + (r.user.displayName || 'there') + '!'); updateNav() })
+    .then(function (r) { closeModalFn(); showToast('Welcome back, ' + (r.user.displayName || 'there') + '!'); updateNav(r.user); showPage('dashboard') })
     .catch(function (err) { showToast(err.code === 'auth/user-not-found' ? 'No account found' : 'Incorrect password', 'error') })
     .finally(function () { btn.textContent = 'Log In'; btn.disabled = false });
 });
@@ -288,14 +288,14 @@ $('loginBtn').addEventListener('click', function () {
 // Google sign-in
 $('googleBtn').addEventListener('click', function () {
   signInWithPopup(auth, googleProvider)
-    .then(function (r) { closeModalFn(); showToast('Welcome, ' + (r.user.displayName || 'there') + '!'); updateNav() })
+    .then(function (r) { closeModalFn(); showToast('Welcome, ' + (r.user.displayName || 'there') + '!'); updateNav(r.user); showPage('dashboard') })
     .catch(function (err) { showToast(err.message, 'error') });
 });
 
 function updateNav(u) {
   var link = $('navBizLink');
   var mobileLink = $('openLoginMobile');
-  if (u && isBizUser(u)) {
+  if (u) {
     if (link) link.textContent = 'Dashboard';
     if (mobileLink) mobileLink.textContent = 'Dashboard';
   } else {
@@ -797,10 +797,9 @@ $('dashBulkUpload').addEventListener('click', function () { showToast('Bulk uplo
 $('dashTeam').addEventListener('click', function () { showToast('Team management coming soon!') });
 $('dashExport').addEventListener('click', function () { showToast('Generating report...'); setTimeout(function () { showToast('Report downloaded!') }, 1500) });
 
-// Auto-redirect to dashboard if a biz user is already logged in (session persisted)
+// Auto-redirect to dashboard if user is already logged in (session persisted)
 onAuthStateChanged(auth, function (u) {
-  if (u && isBizUser(u)) {
-    // User has an active biz session — show dashboard
+  if (u) {
     showPage('dashboard');
   }
 });
