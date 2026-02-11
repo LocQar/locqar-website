@@ -252,28 +252,6 @@ $('closeModal').addEventListener('click', closeModalFn);
 modal.addEventListener('click', function (e) { if (e.target === modal) closeModalFn() });
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModalFn() });
 
-function switchTab(t) {
-  document.querySelectorAll('.modal-tab').forEach(function (b) { b.classList.toggle('active', b.dataset.tab === t) });
-  $('loginForm').style.display = t === 'login' ? 'block' : 'none';
-  $('signupForm').style.display = t === 'signup' ? 'block' : 'none';
-  $('modalTitle').textContent = t === 'login' ? 'Welcome Back' : 'Create Account';
-  $('modalDesc').textContent = t === 'login' ? 'Log in to manage your packages' : 'Join LocQar';
-}
-document.querySelectorAll('.modal-tab').forEach(function (t) { t.addEventListener('click', function () { switchTab(t.dataset.tab) }) });
-
-// Consumer signup
-$('signupBtn').addEventListener('click', function () {
-  var name = $('signupName').value.trim(), email = $('signupEmail').value.trim(), pass = $('signupPass').value, btn = $('signupBtn');
-  if (!name || !email || !pass) { showToast('Please fill in all fields', 'error'); return }
-  if (pass.length < 6) { showToast('Password must be at least 6 characters', 'error'); return }
-  btn.textContent = 'Creating...'; btn.disabled = true;
-  createUserWithEmailAndPassword(auth, email, pass)
-    .then(function (r) { return updateProfile(r.user, { displayName: name }) })
-    .then(function () { closeModalFn(); showToast('Account created! Welcome, ' + name + '!'); updateNav(auth.currentUser); showPage('dashboard') })
-    .catch(function (err) { showToast(err.code === 'auth/email-already-in-use' ? 'Email already registered' : err.message, 'error') })
-    .finally(function () { btn.textContent = 'Create Account'; btn.disabled = false });
-});
-
 // Consumer login
 $('loginBtn').addEventListener('click', function () {
   var email = $('loginEmail').value.trim(), pass = $('loginPass').value, btn = $('loginBtn');
