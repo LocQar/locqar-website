@@ -29,6 +29,8 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
+function isBizUser(u) { return u && u.displayName && u.displayName.indexOf('[') !== -1 }
+
 // Set persistence so sessions survive refresh
 setPersistence(auth, browserLocalPersistence);
 
@@ -193,7 +195,7 @@ $('backMobile').addEventListener('click', function () { var isDash = $('bizDashb
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('go-biz')) {
     e.preventDefault();
-    if (auth.currentUser && auth.currentUser.email && auth.currentUser.email.endsWith('@biz.locqar.app')) {
+    if (auth.currentUser && isBizUser(auth.currentUser)) {
       showPage('dashboard');
     } else {
       showPage('biz');
@@ -228,10 +230,19 @@ document.querySelectorAll('[data-count]').forEach(function (el) { cObs.observe(e
 var modal = $('authModal');
 function openModal() { modal.classList.add('open'); document.body.style.overflow = 'hidden' }
 function closeModalFn() { modal.classList.remove('open'); document.body.style.overflow = '' }
+var navLogin = $('navBizLink');
+if (navLogin) navLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (auth.currentUser && isBizUser(auth.currentUser)) {
+    showPage('dashboard');
+  } else {
+    openModal();
+  }
+});
 var olm = $('openLoginMobile');
 if (olm) olm.addEventListener('click', function (e) {
   e.preventDefault(); ham.classList.remove('active'); mm.classList.remove('open');
-  if (auth.currentUser && auth.currentUser.email && auth.currentUser.email.endsWith('@biz.locqar.app')) {
+  if (auth.currentUser && isBizUser(auth.currentUser)) {
     showPage('dashboard');
   } else {
     openModal();
@@ -252,23 +263,21 @@ document.querySelectorAll('.modal-tab').forEach(function (t) { t.addEventListene
 
 // Consumer signup
 $('signupBtn').addEventListener('click', function () {
-  var name = $('signupName').value.trim(), phone = $('signupPhone').value.trim(), pass = $('signupPass').value, btn = $('signupBtn');
-  if (!name || !phone || !pass) { showToast('Please fill in all fields', 'error'); return }
+  var name = $('signupName').value.trim(), email = $('signupEmail').value.trim(), pass = $('signupPass').value, btn = $('signupBtn');
+  if (!name || !email || !pass) { showToast('Please fill in all fields', 'error'); return }
   if (pass.length < 6) { showToast('Password must be at least 6 characters', 'error'); return }
-  var email = phone.replace(/[^0-9]/g, '') + '@locqar.app';
   btn.textContent = 'Creating...'; btn.disabled = true;
   createUserWithEmailAndPassword(auth, email, pass)
     .then(function (r) { return updateProfile(r.user, { displayName: name }) })
     .then(function () { closeModalFn(); showToast('Account created! Welcome, ' + name + '!'); updateNav() })
-    .catch(function (err) { showToast(err.code === 'auth/email-already-in-use' ? 'Phone already registered' : err.message, 'error') })
+    .catch(function (err) { showToast(err.code === 'auth/email-already-in-use' ? 'Email already registered' : err.message, 'error') })
     .finally(function () { btn.textContent = 'Create Account'; btn.disabled = false });
 });
 
 // Consumer login
 $('loginBtn').addEventListener('click', function () {
-  var phone = $('loginPhone').value.trim(), pass = $('loginPass').value, btn = $('loginBtn');
-  if (!phone || !pass) { showToast('Please fill in all fields', 'error'); return }
-  var email = phone.replace(/[^0-9]/g, '') + '@locqar.app';
+  var email = $('loginEmail').value.trim(), pass = $('loginPass').value, btn = $('loginBtn');
+  if (!email || !pass) { showToast('Please fill in all fields', 'error'); return }
   btn.textContent = 'Logging in...'; btn.disabled = true;
   signInWithEmailAndPassword(auth, email, pass)
     .then(function (r) { closeModalFn(); showToast('Welcome back, ' + (r.user.displayName || 'there') + '!'); updateNav() })
@@ -286,7 +295,7 @@ $('googleBtn').addEventListener('click', function () {
 function updateNav(u) {
   var link = $('navBizLink');
   var mobileLink = $('openLoginMobile');
-  if (u && u.email && u.email.endsWith('@biz.locqar.app')) {
+  if (u && isBizUser(u)) {
     if (link) link.textContent = 'Dashboard';
     if (mobileLink) mobileLink.textContent = 'Dashboard';
   } else {
@@ -368,9 +377,9 @@ $('bizSubmit').addEventListener('click', function () {
   if (pw.length < 8) { showToast('Password must be at least 8 characters', 'error'); return }
   if (pw !== pw2) { showToast('Passwords do not match', 'error'); return }
   if (!$('bizTerms').checked) { showToast('Please agree to the Terms', 'error'); return }
-  var phone = $('bizPhone').value.trim();
+  var email = $('bizEmail').value.trim();
   var dn = $('bizFirst').value.trim() + ' ' + $('bizLast').value.trim() + ' [' + $('bizName').value.trim() + ']';
-  var email = phone.replace(/[^0-9]/g, '') + '@biz.locqar.app';
+  if (!email) { showToast('Please enter your business email', 'error'); return }
   btn.textContent = 'Creating...'; btn.disabled = true;
   createUserWithEmailAndPassword(auth, email, pw)
     .then(function (r) { return updateProfile(r.user, { displayName: dn }) })
@@ -382,15 +391,14 @@ $('bizSubmit').addEventListener('click', function () {
       showToast('Business account created!');
       setTimeout(function () { showPage('dashboard') }, 1500);
     })
-    .catch(function (err) { showToast(err.code === 'auth/email-already-in-use' ? 'Phone already registered. Try logging in.' : err.message, 'error') })
+    .catch(function (err) { showToast(err.code === 'auth/email-already-in-use' ? 'Email already registered. Try logging in.' : err.message, 'error') })
     .finally(function () { btn.textContent = 'Create Business Account'; btn.disabled = false });
 });
 
 // Biz login
 $('bizLoginBtn').addEventListener('click', function () {
-  var phone = $('bizLoginPhone').value.trim(), pw = $('bizLoginPass').value, btn = $('bizLoginBtn');
-  if (!phone || !pw) { showToast('Fill in all fields', 'error'); return }
-  var email = phone.replace(/[^0-9]/g, '') + '@biz.locqar.app';
+  var email = $('bizLoginEmail').value.trim(), pw = $('bizLoginPass').value, btn = $('bizLoginBtn');
+  if (!email || !pw) { showToast('Fill in all fields', 'error'); return }
   btn.textContent = 'Signing in...'; btn.disabled = true;
   signInWithEmailAndPassword(auth, email, pw)
     .then(function (r) {
@@ -791,7 +799,7 @@ $('dashExport').addEventListener('click', function () { showToast('Generating re
 
 // Auto-redirect to dashboard if a biz user is already logged in (session persisted)
 onAuthStateChanged(auth, function (u) {
-  if (u && u.email && u.email.endsWith('@biz.locqar.app')) {
+  if (u && isBizUser(u)) {
     // User has an active biz session — show dashboard
     showPage('dashboard');
   }
