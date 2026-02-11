@@ -195,6 +195,7 @@ $('backMobile').addEventListener('click', function () { var isDash = $('bizDashb
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('go-biz')) {
     e.preventDefault();
+    closeModalFn();
     if (auth.currentUser && isBizUser(auth.currentUser)) {
       showPage('dashboard');
     } else {
